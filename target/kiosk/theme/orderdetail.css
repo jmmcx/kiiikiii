@@ -1,0 +1,89 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    position: relative; /* Makes body the reference for absolute elements */
+}
+
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+}
+
+.back-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.header {
+    margin-top: 60px;
+    font-size: 1.8em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.order-list {
+    width: 100%;
+    max-width: 600px;
+    min-height: 150px;
+    margin: 20px 0;
+    background: #f1f1f1;
+    border-radius: 10px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.order-item span:first-child {
+    margin-right: 10px; /* Space between quantity and item name */
+}
+
+.add-more-items {
+    margin: 20px 0;
+    font-size: 0.8em;
+    color: #afadad; /* Light grey font color */
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.confirm-button {
+    display: inline-block;
+    width: 80%; /* Reduced width for better layout */
+    max-width: 400px;
+    padding: 15px 20px;
+    background-color: #e35205;
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50px; /* Round corners */
+    position: absolute; /* Positioned at the bottom of the page */
+    bottom: 20px;
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%);
+}
+
+.confirm-button:hover {
+    background-color: #944109;
+}

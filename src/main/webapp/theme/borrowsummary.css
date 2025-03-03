@@ -1,0 +1,147 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative; /* Makes body the reference for absolute elements */
+}
+
+.content-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.back-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.header {
+  margin-top: 60px;
+  margin-bottom: 50px; /* Increased spacing below the main header */
+  font-size: 1.8em;
+  font-weight: bold;
+  text-align: center;
+  color: #000;
+}
+
+.section-header {
+  display: flex;
+  align-items: center; /* Aligns text vertically */
+  margin-bottom: 10px; /* Adds spacing between header and detail box */
+  width: 90%;
+}
+
+.section-header h2 {
+  font-size: 14px;
+  font-weight: normal;
+  color: #333;
+  text-align: left;
+  margin: 0; /* No extra spacing around the header */
+}
+
+.item-list {
+  background: #f9f9f9;
+  border-radius: 12px;
+  width: 90%;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.item {
+  display: flex;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quantity {
+  min-width: 30px;
+}
+
+.item-name {
+  flex: 1;
+}
+
+.student-info {
+  background: #f9f9f9;
+  border-radius: 12px;
+  width: 90%;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.student-info p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.student-info span {
+  font-weight: bold;
+  color: #000;
+}
+
+.terms {
+  font-size: 0.9em;
+  text-align: center;
+  margin: 20px 20px 40px; /* Increase bottom margin to create more space i.e 40 to 60 */
+  color: #666;
+}
+
+.auto-return {
+  font-size: 1em;
+  text-align: center;
+  margin-bottom: 20px;  /* Reduced margin | margin-top: 40px; -- Add top margin to increase space between this and .terms*/
+  color: #000;
+}
+
+.main-menu-button {
+  display: inline-block;
+  width: 80%;
+  max-width: 400px;
+  padding: 15px 20px;
+  background-color: #e35205;
+  color: #fff;
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+
+.main-menu-button:hover {
+  background-color: #944109;
+}

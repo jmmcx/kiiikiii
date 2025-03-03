@@ -1,0 +1,5 @@
+2025-01-23 14:34:57 [main] INFO  bean.dBtest - Attempting to connect to database...
+2025-01-23 14:34:58 [main] INFO  bean.dBtest - Database connection successful!
+2025-01-23 14:34:58 [main] INFO  bean.dBtest - Database Product: MySQL
+2025-01-23 14:34:58 [main] INFO  bean.dBtest - Database Version: 8.0.40
+2025-01-23 14:34:58 [main] INFO  bean.dBtest - Connection closed successfully.
