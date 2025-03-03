@@ -145,7 +145,7 @@
     <div class="title">Academic Calendar <%= year %></div>
     <div class="content">
                 <div id="pdfContent">
-                    <iframe src="<%= pdfPath %>" class="pdf-viewer"></iframe>
+                    <iframe src="https://docs.google.com/gview?embedded=true&url=<%= pdfPath %>" class="pdf-viewer"></iframe>
                 </div>
     </div>
 </body>

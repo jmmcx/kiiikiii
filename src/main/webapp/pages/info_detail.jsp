@@ -182,10 +182,11 @@
             } else if ("termdates".equals(type)) {
                 // For term dates, show the content
         %>
+        
                 <div class="subtitle">University Term Dates</div>
                 
                 <div id="pdfContent">
-                    <iframe src="<%= termdateUrl %>" class="pdf-viewer"></iframe>
+                    <iframe src="https://docs.google.com/gview?embedded=true&url=<%= termdateUrl %>" class="pdf-viewer"></iframe>
                 </div>
                 
                 <div id="qrCode" style="display: none;" class="qr-code">

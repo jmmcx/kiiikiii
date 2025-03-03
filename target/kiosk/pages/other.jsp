@@ -17,10 +17,10 @@
         .grid-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            row-gap: 50px;
-            column-gap: 13px;
+            row-gap: 30px;
+            column-gap: 20px;
             width: 100%;
-            max-width: 960px;
+            max-width: 10800px;
             margin-top: 80px;
             padding: 20px;
         }
@@ -51,6 +51,7 @@
 
         .grid-item:hover {
             background-color: #e35205;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
 
         /* Tablet Portrait and Landscape */

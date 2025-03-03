@@ -21,7 +21,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 1080px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 20px;
     box-sizing: border-box;
@@ -40,7 +40,7 @@ body {
 }
 .community-section {
     width: 100%;
-    max-width: 1080px; /* Match the container width */
+    max-width: 960px; /* Match the container width */
     margin: 0 auto;
     text-align: center; /* Center the image */
 }

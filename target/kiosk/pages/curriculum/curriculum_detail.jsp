@@ -212,7 +212,7 @@
         <!-- PDF Viewer for Conclusion PDF -->
         <div id="pdfContent">
             <% if (!concludepdfUrl.isEmpty()) { %>
-                <iframe src="<%= concludepdfUrl %>" class="pdf-viewer"></iframe>
+                <iframe src="https://docs.google.com/gview?embedded=true&url=<%= concludepdfUrl %>" class="pdf-viewer"></iframe>
             <% } else { %>
                 <p>No PDF available.</p>
             <% } %>

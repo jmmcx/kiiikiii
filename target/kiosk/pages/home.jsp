@@ -5,6 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../theme/home.css">
   <title>RAI Department</title>
+  <script>
+    function enterFullScreen() {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+        document.documentElement.webkitRequestFullscreen();
+      } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+        document.documentElement.mozRequestFullScreen();
+      } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+        document.documentElement.msRequestFullscreen();
+      }
+    }
+  
+    function exitFullScreen() {
+      if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) { /* Firefox */
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) { /* IE/Edge */
+          document.msExitFullscreen();
+        }
+      }
+    }
+  
+    // Trigger fullscreen when image is clicked (for demonstration purposes)
+    document.querySelector('.logo').addEventListener('click', () => {
+      if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+        exitFullScreen();  // Exit fullscreen if currently in fullscreen mode
+      } else {
+        enterFullScreen();  // Enter fullscreen if not currently in fullscreen mode
+      }
+    });
+  </script>
+  
   <style>
     body {
       margin: 0;
@@ -107,7 +144,7 @@
 <body>
   <!-- Fixed Header -->
   <div class="header">
-    <img src="../images/rai_logo.png" alt="RAI Logo" class="logo">
+    <img src="../images/rai_logo.png" alt="RAI Logo" class="logo" onclick="exitFullScreen()">
   </div>
 
   <div class="container">
