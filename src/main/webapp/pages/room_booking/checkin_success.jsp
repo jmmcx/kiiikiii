@@ -5,11 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Check-In Success</title>
+    
     <script>
         function goBackToMainMenu() {
             window.location.href = '../home.jsp'; // Redirect to home page
         }
+    
+        // Trigger the printing servlet automatically on page load
+        window.onload = function() {
+            const url = '<%= request.getContextPath() %>/CheckinPrintServlet';
+            console.log("Attempting to fetch from:", url);
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => console.log("Print Response:", data))
+            .catch(error => console.error('Print Error:', error));
+        };
     </script>
+    
     <style>
         /* Reset and base styles */
         * {

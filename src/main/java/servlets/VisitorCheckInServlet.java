@@ -46,7 +46,7 @@ public class VisitorCheckInServlet extends HttpServlet {
             ReservationModel reservation = reservationDAO.getReservationByBookingID(qrValue);
             
             if (reservation != null) {
-                // Update reservation status to "check-in"
+                // Update reservation status to "check-in" if status is "confirmed" (a;ready handle in room_booking jsp page)
                 boolean updateSuccess = reservationDAO.updateReservationStatus(qrValue, "check-in");
                 
                 if (updateSuccess) {

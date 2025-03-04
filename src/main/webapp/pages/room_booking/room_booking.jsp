@@ -1,4 +1,29 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page import="dao.ReservationDAO" %>
+<%
+// Check if this is a status check request - MUST be at the very top of the file
+String checkStatus = request.getParameter("checkStatus");
+String bookingId = request.getParameter("bookingId");
+
+if ("true".equals(checkStatus) && bookingId != null) {
+    // This is an AJAX request to check booking status
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    
+    // Clear any existing output
+    out.clearBuffer();
+    
+    ReservationDAO reservationDAO = new ReservationDAO();
+    String status = reservationDAO.getStatusByBookingID(bookingId);
+    
+    // Write JSON response directly
+    out.print("{\"status\": " + (status == null ? "null" : "\"" + status + "\"") + "}");
+    out.flush();
+    
+    // End processing here
+    return;
+}
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +33,7 @@
     <script src="https://unpkg.com/@zxing/library@latest"></script>
     <script>
         let videoStream = null; // Store video stream globally to prevent duplicate streams
+        let isProcessing = false; // Flag to prevent multiple simultaneous processing
     
         function startQRScanner() {
             const videoElement = document.getElementById('videoElement');
@@ -27,29 +53,81 @@
     
                     const codeReader = new ZXing.BrowserQRCodeReader();
                     codeReader.decodeFromVideoDevice(null, videoElement, function(result, err) {
-                        if (result) {
+                        if (result && !isProcessing) {
+                            isProcessing = true; // Set flag to prevent multiple processing
                             console.log('QR Code:', result.text);
-    
-                            // Send QR value to servlet
-                            fetch('<%= request.getContextPath() %>/VisitorCheckInServlet', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ qrValue: result.text })
-                            })
-                            .then(response => {
-                                if (response.redirected) {
-                                    window.location.href = response.url; // Redirect if needed
-                                } else {
-                                    return response.json();
+                            
+                            // Display scanning message
+                            document.getElementById('scanStatus').textContent = 'Processing QR code...';
+                            document.getElementById('scanStatus').style.display = 'block';
+                            
+                            // Check booking status directly using AJAX to the same JSP page
+                            // Using timestamp to prevent caching
+                            const timestamp = new Date().getTime();
+                            fetch('room_booking.jsp?checkStatus=true&bookingId=' + encodeURIComponent(result.text) + '&t=' + timestamp, {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Cache-Control': 'no-cache'
                                 }
                             })
-                            .then(data => {
-                                console.log('Success:', data);
+                            .then(response => response.text())
+                            .then(text => {
+                                try {
+                                    const data = JSON.parse(text);
+                                    
+                                    if (data.status === "check-in") {
+                                        // Already checked in - show message
+                                        document.getElementById('scanStatus').textContent = 'Already checked in for this reservation.';
+                                        document.getElementById('scanStatus').style.color = '#e35205';
+                                        isProcessing = false;
+                                    } else if (data.status === null || data.status === "NotFound") {
+                                        // Booking doesn't exist
+                                        document.getElementById('scanStatus').textContent = 'Invalid booking ID. Please try again.';
+                                        document.getElementById('scanStatus').style.color = '#e35205';
+                                        isProcessing = false;
+                                    } else {
+                                        // Valid booking that isn't checked in yet, proceed to servlet for check-in
+                                        // Send QR value to servlet - let the servlet handle redirection
+                                        fetch('<%= request.getContextPath() %>/VisitorCheckInServlet', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ qrValue: result.text })
+                                        })
+                                        .then(response => {
+                                            if (response.redirected) {
+                                                // Let the browser follow the redirect from the servlet
+                                                window.location.href = response.url;
+                                            } else {
+                                                return response.json().then(data => {
+                                                    // If there's an error, display it and reset processing flag
+                                                    document.getElementById('scanStatus').textContent = 
+                                                        data.error || 'Error processing QR code. Please try again.';
+                                                    document.getElementById('scanStatus').style.color = '#e35205';
+                                                    isProcessing = false;
+                                                });
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                            document.getElementById('scanStatus').textContent = 'Error processing QR code. Please try again.';
+                                            document.getElementById('scanStatus').style.color = '#e35205';
+                                            isProcessing = false;
+                                        });
+                                    }
+                                } catch (e) {
+                                    console.error('Error parsing JSON:', e, 'Response text:', text);
+                                    document.getElementById('scanStatus').textContent = 'Error checking reservation status. Please try again.';
+                                    document.getElementById('scanStatus').style.color = '#e35205';
+                                    isProcessing = false;
+                                }
                             })
-                            .catch(error => console.error('Error:', error));
-    
-                            // Stop camera stream after reading QR code
-                            stopCamera();
+                            .catch(error => {
+                                console.error('Error checking status:', error);
+                                document.getElementById('scanStatus').textContent = 'Error checking reservation status. Please try again.';
+                                document.getElementById('scanStatus').style.color = '#e35205';
+                                isProcessing = false;
+                            });
                         }
                     });
                 })
@@ -154,6 +232,16 @@
             text-align: center;
         }
 
+        /* Scan status message */
+        #scanStatus {
+            font-size: 42px;
+            font-weight: 600;
+            color: #3AE180;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
         /* Camera feed container */
         .camera-container {
             width: 800px;
@@ -242,6 +330,9 @@
                 <video id="videoElement"></video>
                 <div class="scan-overlay"></div>
             </div>
+            
+            <!-- Status message for QR processing -->
+            <div id="scanStatus"></div>
         </div>
         <button class="main-menu-btn" onclick="goBackToMainMenu()">
             BACK TO MAIN MENU

@@ -9,6 +9,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.io.ByteArrayOutputStream;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.HashMap;
@@ -58,4 +59,39 @@ public class QRCodeUtil {
             throw new RuntimeException("Failed to generate QR code: " + e.getMessage());
         }
     }
+
+    // New method for BufferedImage (for printer)
+    public static BufferedImage generateQRCodeImage(String content, int width, int height) {
+        if (content == null || content.trim().isEmpty()) {
+            logger.warn("Content cannot be empty");
+            throw new IllegalArgumentException("Content cannot be empty");
+        }
+
+        try {
+            // Configure QR code parameters
+            Map<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            hints.put(EncodeHintType.MARGIN, 1);
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+
+            // Create QR code
+            QRCodeWriter qrCodeWriter = new QRCodeWriter();
+            BitMatrix bitMatrix = qrCodeWriter.encode(
+                content.trim(),
+                BarcodeFormat.QR_CODE,
+                width,
+                height,
+                hints
+            );
+            
+            // Convert to BufferedImage and return
+            return MatrixToImageWriter.toBufferedImage(bitMatrix);
+            
+        } catch (WriterException e) {
+            e.printStackTrace();
+            logger.error("Failed to generate QR code image", e.getMessage());
+            throw new RuntimeException("Failed to generate QR code image: " + e.getMessage());
+        }
+    }
+
 }
