@@ -180,10 +180,14 @@
   </div>
 
   <div class="container">
+    <video class="community-video" autoplay muted loop>
+      <source src="../images/3dmodel.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
     <!-- RAI Community Image -->
-    <div class="community-section">
+    <!--div class="community-section">
       <img src="../images/rai_community.png" alt="RAI Community" class="community-image">
-    </div>
+    </div-->
 
     <!-- FAQ Section -->
     <div class="faq-section">
