@@ -2,8 +2,8 @@
 
 <%
     String[][] collaborations = {
-        {"Kyutech", "../../images/collaboration/kyutech.png"},
-        {"FIT", "../../images/collaboration/FIT.jpg"},
+        {"Kyushu Institute of Technology", "../../images/collaboration/kyutech.png"},
+        {"Fukuoka Institute of Technology", "../../images/collaboration/FIT.jpg"},
         {"Temasek Polytechnic", "../../images/collaboration/temasek.jpg"}
     };
 %>
@@ -70,7 +70,7 @@
             display: inline-block;
             font-size: 35px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         /* Collaboration images */

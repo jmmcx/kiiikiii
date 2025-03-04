@@ -83,9 +83,8 @@
         }
     
         .qr-code {
-            width: 600px;
-            height: 600px;
-            margin: 20px 0;
+            width: 750px;
+            height: 750px;
         }
     
         .description {
@@ -111,15 +110,16 @@
             text-transform: uppercase;
             font-weight: bold;
             text-align: center;
+            margin-top: 40px;
         }
     
         @media screen and (min-width: 1080px) {
             .container {
-                padding: 80px 20px;
+                padding: 60px 20px;
             }
     
             .content-wrapper {
-                gap: 40px;
+                gap: 30px;
             }
     
             .title {

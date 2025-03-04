@@ -12,31 +12,35 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            width: 100vw;
             background-color: #000; /* Black background */
         }
+
         #slideshow {
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             position: relative;
             display: flex;
             justify-content: center;
-            align-items: center; /* Centers the content in the slideshow */
+            align-items: center;
         }
+
         img {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the image fills the space without distortion */
             position: absolute;
             transition: opacity 1s ease-in-out;
-            object-fit: contain; /* Ensures the image scales without distortion */
+            margin-left: 2.35px;
         }
     </style>
 </head>
 <body onclick="redirectToMain()">
     <div id="slideshow">
         <!-- Will change to retrieve image from Cloud (if possible) -->
-        <img src="../images/poster/kmitl_admission.jpg" alt="Poster 1" class="poster" style="opacity: 1;">
-        <img src="../images/poster/kmitl_newyear.jpg" alt="Poster 2" class="poster" style="opacity: 0;">
-        <img src="../images/poster/kmitl_openhouse.jpg" alt="Poster 3" class="poster" style="opacity: 0;">
+        <img src="../images/poster/sponsor1.png" alt="Poster 1" class="poster" style="opacity: 1;">
+        <img src="../images/poster/sponsor2.png" alt="Poster 2" class="poster" style="opacity: 0;">
+        <img src="../images/poster/sponsor3.png" alt="Poster 3" class="poster" style="opacity: 0;">
     </div>
 
     <script>

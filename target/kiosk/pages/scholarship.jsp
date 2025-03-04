@@ -284,7 +284,7 @@
     </div>
   </div>
 <div class="content">
-    <div><a onclick="window.location.href= 'scholarship_detail.jsp?type=scholarship'"class="moreinfo-button">FOR MORE INFORMATION</a><div>
+    <div><a onclick="window.location.href= 'scholarship_detail.jsp'"class="moreinfo-button">FOR MORE INFORMATION</a><div>
 </div>
   <!-- JavaScript for FAQ functionality -->
   <script>

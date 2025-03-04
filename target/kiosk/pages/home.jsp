@@ -139,6 +139,38 @@
       padding: 15px;
       margin-top: 10px;
     }
+    .sponsor-container {
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      width: 100%;
+    }
+
+    .sponsor-slider {
+      display: inline-block;
+      white-space: nowrap;
+      animation: slide 30s linear infinite;
+    }
+
+    @keyframes slide {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(-100%);
+      }
+    }
+
+    .sponsor-slider img {
+      height: 200px; /* Standardize height for all logos */
+      width: auto; /* Maintain aspect ratio */
+      max-width: 200px; /* Prevent logos from getting too wide */
+      object-fit: contain;
+      margin: 0 15px;
+      background-color: white; /* Optional: Adds contrast for transparent logos */
+      padding: 10px; /
+    }
+
   </style>
 </head>
 <body>
@@ -266,22 +298,41 @@
       <div class="faq-answer">
         Check out more info from this link: <a href="https://rai.kmitl.ac.th/avada_portfolio/rai/" target="_blank">RAI Official Website</a>
       </div>
-    </div>
-    <div class="menu-bar">
-      <div class="menu-container">
-          <a href="map.jsp" class="menu-item">
-              <img src="${pageContext.request.contextPath}/images/icon/map_icon1.png" alt="Map" class="menu-icon" id="map-icon">
-          </a>
-          <a href="home.jsp" class="menu-item">
-              <img src="${pageContext.request.contextPath}/images/icon/home_icon1.png" alt="Home" class="menu-icon" id="home-icon">
-          </a>
-          <a href="other.jsp" class="menu-item">
-              <img src="${pageContext.request.contextPath}/images/icon/other_icon1.png" alt="Other" class="menu-icon" id="other-icon">
-          </a>
+      <div class="sponsor-container">
+        <div class="sponsor-slider">
+          <img src="../images/sponsor/abb.png" alt="Sponsor 1">
+          <img src="../images/sponsor/autodesk.png" alt="Sponsor 2">
+          <img src="../images/sponsor/aws.png" alt="Sponsor 3">
+          <img src="../images/sponsor/delta.png" alt="Sponsor 4">
+          <img src="../images/sponsor/depa.png" alt="Sponsor 5">
+          <img src="../images/sponsor/dsignage.png" alt="Sponsor 6">
+          <img src="../images/sponsor/festo.png" alt="Sponsor 7">
+          <img src="../images/sponsor/gti.png" alt="Sponsor 8">
+          <img src="../images/sponsor/krungthai.png" alt="Sponsor 9">
+          <img src="../images/sponsor/mitsu.png" alt="Sponsor 10">
+          <img src="../images/sponsor/nachi.png" alt="Sponsor 11">
+          <img src="../images/sponsor/nvidia.png" alt="Sponsor 12">
+          <img src="../images/sponsor/ptt.png" alt="Sponsor 13">
+          <img src="../images/sponsor/pwc.png" alt="Sponsor 14">
+          <img src="../images/sponsor/seagate.png" alt="Sponsor 15">
+          <img src="../images/sponsor/solimac.png" alt="Sponsor 16">
+          <img src="../images/sponsor/thaisteel.png" alt="Sponsor 17">
+        </div>
       </div>
+    </div>
   </div>
-
-  
+  <div class="menu-bar">
+    <div class="menu-container">
+        <a href="map.jsp" class="menu-item">
+            <img src="${pageContext.request.contextPath}/images/icon/map_icon1.png" alt="Map" class="menu-icon" id="map-icon">
+        </a>
+        <a href="home.jsp" class="menu-item">
+            <img src="${pageContext.request.contextPath}/images/icon/home_icon1.png" alt="Home" class="menu-icon" id="home-icon">
+        </a>
+        <a href="other.jsp" class="menu-item">
+            <img src="${pageContext.request.contextPath}/images/icon/other_icon1.png" alt="Other" class="menu-icon" id="other-icon">
+        </a>
+    </div>
 </div>
 
   <!-- JavaScript for FAQ functionality -->

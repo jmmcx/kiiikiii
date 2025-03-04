@@ -7,10 +7,10 @@ html, body {
     min-height: 1920px;
 }
 .menu-bar {
-    width: 92.8vw; /* 1002px / 1080px ≈ 92.8% */
+    width: 93.35vw; /* 1002px / 1080px ≈ 92.8% */
     height: 11.5vh; /* 220px / 1920px ≈ 11.5% */
     position: fixed;
-    bottom: 2vh; /* 40px / 1920px */
+    bottom: 1.77vh; /* 40px / 1920px */
     left: 50%;
     transform: translateX(-50%);
 }
@@ -46,7 +46,7 @@ html, body {
 /* Responsive Design for Different Screen Sizes */
 @media screen and (max-width: 1080px) {
     .menu-bar {
-        width: 92.8vw;
+        width: 93.35vw;
         height: 10.5vh;
         bottom: 2.5vh;
     }

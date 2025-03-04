@@ -177,8 +177,15 @@
             String termdateUrl = ConfigUtil.getProperty("termdate.url");
             String type = request.getParameter("type");
             if ("admission".equals(type)) {
-                // For admission, redirect immediately to admission page
-                response.sendRedirect(admissionUrl);
+                %>
+                    <div class="subtitle">Admission Information</div>
+                
+                    <!-- Admission Page Viewer -->
+                    <div id="admissionContent">
+                        <iframe src="<%= admissionUrl %>" class="pdf-viewer"></iframe>
+                    </div>
+                <%
+                
             } else if ("termdates".equals(type)) {
                 // For term dates, show the content
         %>

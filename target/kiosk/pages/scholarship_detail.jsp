@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="util.QRCodeUtil"%>
-<%@ page import="util.ConfigUtil" %>
+<%@ page import="util.QRCodeUtil" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,179 +7,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scholarship Detail</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
+        }
+    
+        body {
             min-height: 100vh;
             background-color: #ffffff;
         }
-
-        .back-arrow-container {
+    
+        .back-button {
             position: fixed;
-            top: 0;
-            left: 0;
-            padding: 15px;
-            background-color: #ffffff;
-            z-index: 1000;
+            top: 90px;
+            left: 70px;
+            z-index: 100;
+            transition: opacity 0.3s ease-in-out;
         }
-
-        .back-arrow {
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
+    
+        .back-button img {
+            width: 80px;
+            height: 80px;
         }
-
-        .title {
-            font-size: 30px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .subtitle {
-            font-size: 18px;
-            font-weight: 600px; /*semi-bold */
-            text-align: center;
-            margin: 0 0 30px 0; /* top 0, bottom 30 */
-        }
-
-        .content {
-            padding: 60px 20px 90px 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .pdf-viewer {
+    
+    
+        .container {
+            min-height: 100vh;
             width: 100%;
-            height: 70vh;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .content-wrapper {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px; /* Consistent spacing between elements */
+        }
+    
+        .title {
+            text-align: center;
+            margin: 80px 0 20px;
+            font-weight: bold;
+            margin-top: 190px;
+            font-size: 65px;
+        }
+    
+        .qr-code {
+            width: 600px;
+            height: 600px;
             margin: 20px 0;
         }
-
-        .qr-code {
-            max-width: 300px;
-            margin: 30px auto;
-        }
-
         .qr-code img {
             width: 100%;
             height: auto;
         }
-
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            margin: 10px;
-            border-radius: 25px;
+        .menu-button {
+            display: block;
+            width: 100%;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 15px;
             cursor: pointer;
+            font-size: 40px;
             font-weight: bold;
+            transition: background-color 0.2s;
             text-decoration: none;
-            transition: background-color 0.3s;
-        }
-
-        .main-menu-btn {
-            background-color: #FF5722;
-            color: white;
-        }
-
-        .qr-btn {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        /* Media queries for responsiveness */
-        @media screen and (min-width: 1920px) {
-            .back-arrow {
-                width: 30px;
-                height: 30px;
-            }
-
-            .title {
-                font-size: 30px;
-            }
-
-            .subtitle {
-                font-size: 24px;
-            }
-
-            .qr-code {
-                max-width: 400px;
-            }
-        }
-
-        @media screen and (max-width: 1080px) and (min-height: 1920px) {
-            .back-arrow-container {
-                padding: 25px;
-            }
-
-            .back-arrow {
-                width: 35px;
-                height: 35px;
-            }
-
-            .content {
-                padding: 100px 30px 140px 30px;
-            }
-
-            .title {
-                font-size: 50px;
-                margin-bottom: 20px;
-            }
-
-            .subtitle {
-                font-size: 28px;
-                margin-bottom: 40px;
-            }
-
-            .qr-code {
-                max-width: 500px;
-                margin: 50px auto;
-            }
-
-            .button {
-                padding: 16px 32px;
-                font-size: 20px;
-                margin: 15px;
-            }
-        }
-
-        @media screen and (max-width: 768px) {
-            .content {
-                padding: 50px 15px 80px 15px;
-            }
-
-            .title {
-                font-size: 20px;
-            }
-
-            .subtitle {
-                font-size: 16px;
-            }
-
-            .button {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="back-arrow-container">
-        <img src="../images/back_arrow.png" alt="Back" class="back-arrow" onclick="history.back()">
+    <a onclick="window.history.back()" class="back-button">
+        <img src="../images/back_arrow.png" alt="Back" class="back-button img">
+    </a>
+    <div class="title">Scholarship</div>
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="qr-code">
+                <img src="../images/kmitl siie.png" alt="QR Code">
+            </div>
+            <a href="home.jsp" class="menu-button">
+                BACK TO MAIN MENU
+            </a>
+        </div>
     </div>
-
-    <div class="content">
-        <div class="title">Scholarship</div>
-        <%
-            String scholarshipUrl = ConfigUtil.getProperty("scholarship.url");
-            String type = request.getParameter("type");
-            if ("scholarship".equals(type)) {
-                // For admission, redirect immediately to SIIE FB page
-                response.sendRedirect(scholarshipUrl);
-            } 
-        %>
-    </div>
-
 </body>
 </html>
