@@ -146,7 +146,8 @@ public class ReservationDAO {
     private String getCurrentTimestamp() {
         return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date());
     }
-/**
+    
+    /**
      * Retrieves the status of a reservation by its booking ID
      * 
      * @param bookingID The booking ID to search for

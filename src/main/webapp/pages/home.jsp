@@ -61,6 +61,7 @@
       margin: auto;
       padding: 20px;
       padding-bottom: 80px;
+      margin-top: 95vh; /* Push the FAQ section down to full screen height */
     }
     .faq-section::after {
     content: "";
@@ -180,10 +181,12 @@
   </div>
 
   <div class="container">
-    <video class="community-video" autoplay muted loop>
-      <source src="../images/3dmodel.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+    <a href="3dmodel.jsp" class="video-link">
+      <video class="community-video" autoplay muted loop>
+        <source src="../3dModel/3dmodel.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </a>
     <!-- RAI Community Image -->
     <!--div class="community-section">
       <img src="../images/rai_community.png" alt="RAI Community" class="community-image">

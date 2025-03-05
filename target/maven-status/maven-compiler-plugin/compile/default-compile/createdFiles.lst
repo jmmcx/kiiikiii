@@ -10,10 +10,14 @@ model\ItemModel.class
 util\SendMail.class
 util\QRCodeUtil.class
 util\SendMail$2.class
+model\LocationData.class
+util\Model3dUtil.class
 servlets\CheckinPrintServlet.class
 servlets\SelectItemServlet.class
+bean\utilityTest.class
 servlets\ReturnItemServlet.class
 bean\dBConnection.class
+util\Model3dUtil$1.class
 util\SendMail$1.class
 servlets\VisitorCheckInServlet.class
 model\SelectedItemsModel.class
