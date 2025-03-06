@@ -14,6 +14,7 @@
             window.location.href = 'welcome.jsp'; // Change this to the path of your welcome page
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8/hammer.min.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -140,6 +141,17 @@
     </div>
 
     <script>
+        const element = document.getElementById('zoomArea');
+        const hammer = new Hammer(element);
+
+        hammer.get('pinch').set({ enable: true });
+
+        let scale = 1;
+
+        hammer.on('pinch', (e) => {
+            scale = e.scale;
+            element.style.transform = `scale(${scale})`;
+        });
         // Building details mapping
         const buildingDetails = {
             'HM_building': { 
