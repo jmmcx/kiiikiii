@@ -8,7 +8,7 @@
 <body>
     <div class="menu-bar">
         <div class="menu-container">
-            <a href="map.jsp" class="menu-item">
+            <a href="3dmodel.jsp" class="menu-item">
                 <img src="${pageContext.request.contextPath}/images/icon/map_icon1.png" alt="Map" class="menu-icon" id="map-icon">
             </a>
             <a href="home.jsp" class="menu-item">

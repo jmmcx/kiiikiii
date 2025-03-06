@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="../theme/home.css">
   <title>RAI Department</title>
-  <script>
+  <script type="text/javascript">
+    // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+    function redirectToWelcomePage() {
+        window.location.href = 'welcome.jsp'; // Change this to the path of your welcome page
+    }
     function enterFullScreen() {
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
@@ -40,8 +44,12 @@
         enterFullScreen();  // Enter fullscreen if not currently in fullscreen mode
       }
     });
+    document.addEventListener("DOMContentLoaded", function () {
+        let videoSource = document.getElementById("videoSource");
+        videoSource.src = "../3dModel/3dmodel.mp4?nocache=" + new Date().getTime();
+        document.getElementById("videoPlayer").load();
+    });
   </script>
-  
   <style>
     body {
       margin: 0;
@@ -183,7 +191,7 @@
   <div class="container">
     <a href="3dmodel.jsp" class="video-link">
       <video class="community-video" autoplay muted loop>
-        <source src="../3dModel/3dmodel.mp4" type="video/mp4">
+        <source src="../3dModel/3dmodel.webm" type="video/webm">
         Your browser does not support the video tag.
       </video>
     </a>
@@ -327,10 +335,12 @@
         </div>
       </div>
     </div>
+    // Set a timer to call the redirect function after 3 minutes
+    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
   </div>
   <div class="menu-bar">
     <div class="menu-container">
-        <a href="map.jsp" class="menu-item">
+        <a href="3dmodel.jsp" class="menu-item">
             <img src="${pageContext.request.contextPath}/images/icon/map_icon1.png" alt="Map" class="menu-icon" id="map-icon">
         </a>
         <a href="home.jsp" class="menu-item">

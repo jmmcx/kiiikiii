@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.Map" %>
-
 <%
     // Get the 'type' parameter from the URL
     String type = request.getParameter("type");
@@ -34,6 +33,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = '../welcome.jsp'; // Change this to the path of your welcome page
+        }
+    </script>
     <style>
         * {
             margin: 0;
@@ -120,6 +125,9 @@
     <a class="back-button" onclick="window.history.back()">
         <img src="../../images/back_arrow.png" alt="Back">
     </a>
+    
+    // Set a timer to call the redirect function after 3 minutes
+    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
     <div class="title">Event</div>
     <div class="container">
         <% if (!imagePath.isEmpty()) { %>

@@ -1,23 +1,23 @@
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\bean\dBtest.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\util\Model3dUtil.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\model\LocationData.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\bean\utilityTest.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\servlets\AddBorrowListServlet.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\servlets\CheckinPrintServlet.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\dao\ReservationDAO.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\servlets\VisitorCheckInServlet.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\util\StudentInfo.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\servlets\MailServlet.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\model\SelectedItemsModel.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\util\ConfigUtil.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\util\AppShutDownListener.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\dao\TransactionDAO.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\model\TransactionModel.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\util\QRCodeUtil.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\util\SendMail.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\dao\ItemDAO.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\model\ReservationModel.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\model\ItemModel.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\servlets\SelectItemServlet.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\bean\dBConnection.java
-C:\Engineering RAI\4th Year\Capstone\kiosk\kikiosk\src\main\java\servlets\ReturnItemServlet.java
+C:\capstone\KIOSK-front\src\main\java\bean\utilityTest.java
+C:\capstone\KIOSK-front\src\main\java\model\ReservationModel.java
+C:\capstone\KIOSK-front\src\main\java\util\StudentInfo.java
+C:\capstone\KIOSK-front\src\main\java\model\TransactionModel.java
+C:\capstone\KIOSK-front\src\main\java\dao\TransactionDAO.java
+C:\capstone\KIOSK-front\src\main\java\servlets\VisitorCheckInServlet.java
+C:\capstone\KIOSK-front\src\main\java\dao\ReservationDAO.java
+C:\capstone\KIOSK-front\src\main\java\model\ItemModel.java
+C:\capstone\KIOSK-front\src\main\java\bean\dBtest.java
+C:\capstone\KIOSK-front\src\main\java\dao\ItemDAO.java
+C:\capstone\KIOSK-front\src\main\java\util\QRCodeUtil.java
+C:\capstone\KIOSK-front\src\main\java\model\SelectedItemsModel.java
+C:\capstone\KIOSK-front\src\main\java\servlets\CheckinPrintServlet.java
+C:\capstone\KIOSK-front\src\main\java\util\Model3dUtil.java
+C:\capstone\KIOSK-front\src\main\java\util\SendMail.java
+C:\capstone\KIOSK-front\src\main\java\servlets\SelectItemServlet.java
+C:\capstone\KIOSK-front\src\main\java\bean\dBConnection.java
+C:\capstone\KIOSK-front\src\main\java\util\ConfigUtil.java
+C:\capstone\KIOSK-front\src\main\java\servlets\AddBorrowListServlet.java
+C:\capstone\KIOSK-front\src\main\java\servlets\MailServlet.java
+C:\capstone\KIOSK-front\src\main\java\model\LocationData.java
+C:\capstone\KIOSK-front\src\main\java\util\AppShutDownListener.java
+C:\capstone\KIOSK-front\src\main\java\servlets\ReturnItemServlet.java

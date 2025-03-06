@@ -31,6 +31,12 @@ if ("true".equals(checkStatus) && bookingId != null) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Booking</title>
     <script src="https://unpkg.com/@zxing/library@latest"></script>
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = '../welcome.jsp'; // Change this to the path of your welcome page
+        }
+    </script>
     <script>
         let videoStream = null; // Store video stream globally to prevent duplicate streams
         let isProcessing = false; // Flag to prevent multiple simultaneous processing
@@ -334,6 +340,8 @@ if ("true".equals(checkStatus) && bookingId != null) {
             <!-- Status message for QR processing -->
             <div id="scanStatus"></div>
         </div>
+        // Set a timer to call the redirect function after 3 minutes
+        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
         <button class="main-menu-btn" onclick="goBackToMainMenu()">
             BACK TO MAIN MENU
         </button>

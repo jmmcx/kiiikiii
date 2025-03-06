@@ -8,7 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/helpers/GridHelper.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = 'welcome.jsp'; // Change this to the path of your welcome page
+        }
+    </script>
     <style>
         body, html {
             margin: 0;
@@ -114,7 +119,8 @@
         <div></div>
         <div></div>
     </div>
-
+    // Set a timer to call the redirect function after 3 minutes
+    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
     <div id="side-menu">
         <div id="side-menu-content">
             <button onclick="goToHomePage()">Home Page</button>

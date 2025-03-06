@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Announcement</title>
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = 'welcome.jsp'; // Change this to the path of your welcome page
+        }
+    </script>
     <style>
         body {
             margin: 0;
@@ -115,6 +121,9 @@
             Engineering Job Fair
         </div>
     <!-- Include menu JSP file -->
+     
+    // Set a timer to call the redirect function after 3 minutes
+    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
     <%@ include file="newmenu.jsp" %>
     </div>
 </body>
