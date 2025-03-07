@@ -74,12 +74,13 @@
 
         .document-title {
             font-size: 40px;
-            color: white;
+            color: black;
             font-weight: 600;
         }
-        .document-title:hover{
+        .document-card:hover .document-title {
             color: white;
         }
+
 
         /* Specific styles for vertical screens (including 1080x1920) */
         @media screen and (orientation: portrait) and (min-width: 1080px) {

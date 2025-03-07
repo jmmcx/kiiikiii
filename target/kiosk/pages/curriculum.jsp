@@ -126,14 +126,14 @@
         </div>
     </div>
     <%@ include file="newmenu.jsp" %>
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = 'welcome.jsp'; 
+        }
+    
+        // Set a timer to call the redirect function after 3 minutes
+        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
+      </script>
 </body>
-<script type="text/javascript">
-    // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
-    function redirectToWelcomePage() {
-        window.location.href = 'welcome.jsp'; 
-    }
-
-    // Set a timer to call the redirect function after 3 minutes
-    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
-  </script>
 </html>
