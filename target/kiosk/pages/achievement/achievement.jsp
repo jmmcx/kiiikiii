@@ -13,12 +13,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Achievement</title>
-    <script type="text/javascript">
-        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
-        function redirectToWelcomePage() {
-            window.location.href = '../welcome.jsp'; // Change this to the path of your welcome page
-        }
-    </script>
     <style>
         body {
             margin: 0;
@@ -138,8 +132,6 @@
     <a href="../other.jsp" class="back-button">
         <img src="../../images/back_arrow.png" alt="Back"  class="back-button img">
     </a>
-    // Set a timer to call the redirect function after 3 minutes
-        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
     <div class="page-title">Achievement</div>
     <!-- Title -->
     <div class="content">
@@ -151,6 +143,14 @@
         <% } %>
         <a href="achievement_detail.jsp" class="moreinfo-button">FOR MORE INFORMATION</a>
     </div>
-
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = '../welcome.jsp'; 
+        }
+    
+        // Set a timer to call the redirect function after 3 minutes
+        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
+    </script>
 </body>
 </html>

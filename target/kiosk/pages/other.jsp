@@ -6,12 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script type="text/javascript">
-        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
-        function redirectToWelcomePage() {
-            window.location.href = 'welcome.jsp'; // Change this to the path of your welcome page
-        }
-    </script>
     <style>
         body {
             min-height: 100vh;
@@ -127,9 +121,16 @@
         <a href="collaboration/collaboration.jsp" class="grid-item"><img src="../images/icon/collaboration.png" alt="Collaboration">COLLABORATION</a>
         <a href="achievement/achievement.jsp" class="grid-item"><img src="../images/icon/achievement.png" alt="Project">ACHIEVEMENT</a>
         <a href="announcement.jsp" class="grid-item"><img src="../images/icon/announcement.png" alt="Announcement">ANNOUNCEMENT</a>
-        // Set a timer to call the redirect function after 3 minutes
-        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
         <%@ include file="menu.jsp" %>
     </div>
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = 'welcome.jsp'; 
+        }
+    
+        // Set a timer to call the redirect function after 3 minutes
+        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
+      </script>
 </body>
 </html>

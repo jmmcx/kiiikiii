@@ -5,12 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation</title>
-    <script type="text/javascript">
-        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
-        function redirectToWelcomePage() {
-            window.location.href = '../welcome.jsp'; // Change this to the path of your welcome page
-        }
-    </script>
     <style>
         * {
             margin: 0;
@@ -139,8 +133,6 @@
     </a>
     
     <div class="page-title">Documentation</div>
-    // Set a timer to call the redirect function after 3 minutes
-    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
     <div class="document-grid">
         <a href="document_type.jsp?type=General" class="document-card">
             <img src="../../images/icon/general_icon.png" alt="General" class="document-icon">
@@ -162,5 +154,14 @@
             <div class="document-title">Disbursement Document</div>
         </a>
     </div>
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = '../welcome.jsp'; 
+        }
+    
+        // Set a timer to call the redirect function after 3 minutes
+        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
+    </script>
 </body>
 </html>

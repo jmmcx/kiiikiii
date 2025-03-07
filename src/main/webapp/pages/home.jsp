@@ -6,10 +6,6 @@
   <link rel="stylesheet" type="text/css" href="../theme/home.css">
   <title>RAI Department</title>
   <script type="text/javascript">
-    // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
-    function redirectToWelcomePage() {
-        window.location.href = 'welcome.jsp'; // Change this to the path of your welcome page
-    }
     function enterFullScreen() {
       if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
@@ -35,7 +31,6 @@
         }
       }
     }
-  
     // Trigger fullscreen when image is clicked (for demonstration purposes)
     document.querySelector('.logo').addEventListener('click', () => {
       if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
@@ -335,8 +330,6 @@
         </div>
       </div>
     </div>
-    // Set a timer to call the redirect function after 3 minutes
-    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
   </div>
   <div class="menu-bar">
     <div class="menu-container">
@@ -362,11 +355,19 @@
         otherItem.classList.remove('active');
       }
     });
-
     // Toggle the current FAQ item
     item.classList.toggle('active');
+    });
   });
-});
+  </script>
+  <script type="text/javascript">
+    // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+    function redirectToWelcomePage() {
+        window.location.href = 'welcome.jsp'; 
+    }
+
+    // Set a timer to call the redirect function after 3 minutes
+    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
   </script>
 </body>
 </html>

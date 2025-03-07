@@ -42,12 +42,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Curriculum Detail</title>
-    <script type="text/javascript">
-        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
-        function redirectToWelcomePage() {
-            window.location.href = '../welcome.jsp'; // Change this to the path of your welcome page
-        }
-    </script>
     <style>
         body {
             margin: 0;
@@ -211,9 +205,6 @@
         <img src="../../images/back_arrow.png" alt="Back" class="back-button img" onclick="history.back()">
     </div>
     <div class="title">Curriculum</div>
-    
-    // Set a timer to call the redirect function after 3 minutes
-    setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
     <div class="content">
         
         <div class="subtitle"><%= subtitle %></div>
@@ -228,7 +219,7 @@
         </div>
 
         <!-- QR Code for Curriculum PDF URL -->
-        <div id="qrCode" style="display: none;" class="qr-code">
+        <div id="qrCode" style="display: none;" class="qr-code">.
             <% 
                 if (!pdfUrl.isEmpty()) { 
                     String qrCodeImage = QRCodeUtil.generateQRCode(pdfUrl, 300, 300);
@@ -260,6 +251,15 @@
                 qrBtn.textContent = 'Show QR Code';
             }
         }
+    </script>
+    <script type="text/javascript">
+        // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
+        function redirectToWelcomePage() {
+            window.location.href = '../welcome.jsp'; 
+        }
+    
+        // Set a timer to call the redirect function after 3 minutes
+        setTimeout(redirectToWelcomePage, 180000);  // 180000 milliseconds = 3 minutes
     </script>
 </body>
 </html>
