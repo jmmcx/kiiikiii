@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 
 import util.QRCodeUtil;
 import model.ReservationModel;
+import model.StudentBookingModel; // Add this import
 
 @SuppressWarnings("unused")
 @WebServlet("/CheckinPrintServlet")
@@ -45,11 +46,22 @@ public class CheckinPrintServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         ReservationModel reservation = (ReservationModel) session.getAttribute("reservation");
+
+        // comment if no print student slip
+        StudentBookingModel studentBooking = (StudentBookingModel) session.getAttribute("studentBooking");
         
+        if (reservation == null && studentBooking == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No reservation or student booking found");
+            return;
+        }
+        // till this one
+
+        // uncomment for visitor slip only
+/* 
         if (reservation == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No reservation found");
             return;
-        }
+        } */
         
         try {
             SerialPort comPort = SerialPort.getCommPort("COM4");
@@ -64,24 +76,98 @@ public class CheckinPrintServlet extends HttpServlet {
             
             OutputStream outputStream = comPort.getOutputStream();
             
-            // Construct the print data
-            String location = null;
-            String location_model = reservation.getLocation();
-            if (location_model.equals("HM Building, Robotics Lab")) {
-                location = "HM BUILDING, RBLAB";
-            } else if (location_model.equals("E-12 Building, Future Lab")) {
-                location = "E-12 BUILDING, FTLAB";
-            } else {
-                location = location_model.toUpperCase();
-            }
-            String bookingDate = reservation.getBookingDate();
-            String timeSlot = reservation.getMergedTimeSlots();
-            String organization = reservation.getOrganization().toUpperCase();
-            List<String> visitorNames = reservation.getVisitorNames();
-            int visitorNumber = reservation.getNumVisitors();
-            
-            // Ensure we have the right number of visitors
-            for (int i = 0; i < visitorNumber; i++) {
+            if (reservation != null) {
+                // Handle visitor reservation printing
+                String location = null;
+                String location_model = reservation.getLocation();
+                if (location_model.equals("HM Building, Robotics Lab")) {
+                    location = "HM BUILDING, RBLAB";
+                } else if (location_model.equals("E-12 Building, Future Lab")) {
+                    location = "E-12 BUILDING, FTLAB";
+                } else {
+                    location = location_model.toUpperCase();
+                }
+                String bookingDate = reservation.getBookingDate();
+                String timeSlot = reservation.getMergedTimeSlots();
+                String organization = reservation.getOrganization().toUpperCase();
+                List<String> visitorNames = reservation.getVisitorNames();
+                int visitorNumber = reservation.getNumVisitors();
+                
+                // Ensure we have the right number of visitors
+                for (int i = 0; i < visitorNumber; i++) {
+                    // Initialize printer
+                    outputStream.write(ESC_INIT);
+                    
+                    // Use smaller line spacing for compact design
+                    outputStream.write(ESC_LINE_SPACING_SMALL);
+                    
+                    // Print logo centered
+                    outputStream.write(ESC_ALIGN_CENTER);
+                    String logoPath = getServletContext().getRealPath("/images/rai_logoBW.png");
+                    printBitmapImage(outputStream, logoPath, 240, 80); 
+                    
+                    // Increased space between booking details
+                    outputStream.write("\n\n".getBytes());  // Extra line for more space
+                    
+                    // Location and date details
+                    outputStream.write(ESC_FONT_BOLD);
+                    outputStream.write(location.getBytes());
+                    outputStream.write("\n\n".getBytes());  // Extra line for more space
+                    
+                    outputStream.write(bookingDate.getBytes());
+                    outputStream.write("\n\n".getBytes());  // Extra line for more space
+                    
+                    outputStream.write(timeSlot.getBytes());
+                    outputStream.write("\n\n\n".getBytes());  // Extra lines for more space
+                    outputStream.write(ESC_FONT_BOLD_OFF);
+                    
+                    // Generate and print QR code
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+                    String timestamp = LocalDateTime.now().format(formatter);
+                    String qrContent = reservation.getBookingId() + "_" + timestamp;
+                    printQRCodeFromBuffer(outputStream, QRCodeUtil.generateQRCodeImage(qrContent, 240, 240));
+                    
+                    // Print visitor name in all caps with the LARGE font (same as VISITOR)
+                    String visitorName = "";
+                    if (i < visitorNames.size()) {
+                        visitorName = visitorNames.get(i).toUpperCase();
+                    }
+                    
+                    // Split visitor name into first and last name
+                    String[] nameParts = visitorName.trim().split(" ", 2);
+                    String firstName = nameParts[0];
+                    String lastName = (nameParts.length > 1) ? nameParts[1] : "";
+                    
+                    outputStream.write("\n\n".getBytes());  // Extra line for more space
+                    outputStream.write(ESC_FONT_LARGE);  // Same font as VISITOR
+                    outputStream.write(ESC_FONT_BOLD);
+                    
+                    // Print first name and last name on separate lines
+                    outputStream.write(firstName.getBytes());
+                    outputStream.write("\n".getBytes());
+                    outputStream.write(lastName.getBytes());
+                    outputStream.write("\n\n\n".getBytes());  // Extra line for more space
+                    
+                    // Print organization
+                    outputStream.write(ESC_FONT_MEDIUM);
+                    outputStream.write(organization.getBytes());
+                    outputStream.write("\n\n\n".getBytes());  // Extra lines for more space
+                    
+                    // Print VISITOR in large text
+                    outputStream.write(ESC_FONT_EXTRA_LARGE);
+                    outputStream.write("VISITOR".getBytes());
+                    outputStream.write("\n".getBytes());
+                    
+                    // Reset font, add final spacing and cut
+                    outputStream.write(ESC_FONT_NORMAL);
+                    outputStream.write(ESC_LINE_SPACING_DEFAULT);
+                    outputStream.write("\n\n".getBytes());
+                    outputStream.write(ESC_CUT_PAPER);
+                }
+            } 
+            // START OF STUDENT PRINTING SECTION - COMMENT FROM HERE
+            else if (studentBooking != null) {
+                // Handle student booking printing
                 // Initialize printer
                 outputStream.write(ESC_INIT);
                 
@@ -91,58 +177,65 @@ public class CheckinPrintServlet extends HttpServlet {
                 // Print logo centered
                 outputStream.write(ESC_ALIGN_CENTER);
                 String logoPath = getServletContext().getRealPath("/images/rai_logoBW.png");
-                printBitmapImage(outputStream, logoPath, 240, 80); 
+                printBitmapImage(outputStream, logoPath, 240, 80);
                 
                 // Increased space between booking details
-                outputStream.write("\n\n".getBytes());  // Extra line for more space
+                outputStream.write("\n\n".getBytes());
                 
-                // Location and date details
+                // Format location similar to visitor format
+                String location = null;
+                String location_model = studentBooking.getLocation();
+                if (location_model.equals("HM Building, Robotics Lab")) {
+                    location = "HM BUILDING, RBLAB";
+                } else if (location_model.equals("E-12 Building, Future Lab")) {
+                    location = "E-12 BUILDING, FTLAB";
+                } else {
+                    location = location_model.toUpperCase();
+                }
+                
+                // Location, date, time and seat details
                 outputStream.write(ESC_FONT_BOLD);
                 outputStream.write(location.getBytes());
-                outputStream.write("\n\n".getBytes());  // Extra line for more space
+                outputStream.write("\n\n".getBytes());
                 
-                outputStream.write(bookingDate.getBytes());
-                outputStream.write("\n\n".getBytes());  // Extra line for more space
+                outputStream.write(studentBooking.getBookingDate().getBytes());
+                outputStream.write("\n\n".getBytes());
                 
-                outputStream.write(timeSlot.getBytes());
-                outputStream.write("\n\n\n".getBytes());  // Extra lines for more space
+                outputStream.write(studentBooking.getTimeSlot().getBytes());
+                outputStream.write("\n\n".getBytes());
+                
+                // Print seat code
+                outputStream.write(("SEAT: " + studentBooking.getSeatCode()).getBytes());
+                outputStream.write("\n\n\n".getBytes());
                 outputStream.write(ESC_FONT_BOLD_OFF);
                 
                 // Generate and print QR code
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
                 String timestamp = LocalDateTime.now().format(formatter);
-                String qrContent = reservation.getBookingId() + "_" + timestamp;
+                String qrContent = studentBooking.getBookingID() + "_" + timestamp;
                 printQRCodeFromBuffer(outputStream, QRCodeUtil.generateQRCodeImage(qrContent, 240, 240));
                 
-                // Print visitor name in all caps with the LARGE font (same as VISITOR)
-                String visitorName = "";
-                if (i < visitorNames.size()) {
-                    visitorName = visitorNames.get(i).toUpperCase();
-                }
+                // Print student name in all caps
+                String studentName = studentBooking.getName().toUpperCase();
                 
-                // Split visitor name into first and last name
-                String[] nameParts = visitorName.trim().split(" ", 2);
+                // Split student name into first and last name
+                String[] nameParts = studentName.trim().split(" ", 2);
                 String firstName = nameParts[0];
                 String lastName = (nameParts.length > 1) ? nameParts[1] : "";
                 
-                outputStream.write("\n\n".getBytes());  // Extra line for more space
-                outputStream.write(ESC_FONT_LARGE);  // Same font as VISITOR
+                outputStream.write("\n\n".getBytes());
+                outputStream.write(ESC_FONT_LARGE);
                 outputStream.write(ESC_FONT_BOLD);
                 
                 // Print first name and last name on separate lines
                 outputStream.write(firstName.getBytes());
                 outputStream.write("\n".getBytes());
                 outputStream.write(lastName.getBytes());
-                outputStream.write("\n\n\n".getBytes());  // Extra line for more space
+                outputStream.write("\n\n\n".getBytes());
                 
-                // Print organization
-                outputStream.write(ESC_FONT_MEDIUM);
-                outputStream.write(organization.getBytes());
-                outputStream.write("\n\n\n".getBytes());  // Extra lines for more space
-                
-                // Print VISITOR in large text
+                // Print STUDENT in large text instead of VISITOR
                 outputStream.write(ESC_FONT_EXTRA_LARGE);
-                outputStream.write("VISITOR".getBytes());
+                outputStream.write("STUDENT".getBytes());
                 outputStream.write("\n".getBytes());
                 
                 // Reset font, add final spacing and cut
@@ -151,6 +244,7 @@ public class CheckinPrintServlet extends HttpServlet {
                 outputStream.write("\n\n".getBytes());
                 outputStream.write(ESC_CUT_PAPER);
             }
+            // END OF STUDENT PRINTING SECTION - COMMENT UNTIL HERE
             
             outputStream.flush();
             outputStream.close();

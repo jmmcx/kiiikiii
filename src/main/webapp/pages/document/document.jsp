@@ -150,7 +150,7 @@
             <div class="document-title">Cooperative Education</div>
         </a>
 
-        <a href="document_type.jsp?type=Disbursement" class="document-card">
+        <a href="disbursement.jsp" class="document-card">
             <img src="../../images/icon/disbursement_icon.png" alt="Disbursement Document" class="document-icon">
             <div class="document-title">Disbursement Document</div>
         </a>

@@ -14,6 +14,7 @@
             height: 100vh;
             width: 100vw;
             background-color: #000; /* Black background */
+            position: relative; /* Added to position the touch text */
         }
 
         #slideshow {
@@ -33,6 +34,18 @@
             transition: opacity 1s ease-in-out;
             margin-left: 2.35px;
         }
+
+        .touch-text {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: black;
+            padding: 10px 0;
+            border-top: 1px solid white;
+            font-family: Arial, sans-serif;
+            font-size: 60px;
+        }
     </style>
 </head>
 <body onclick="redirectToMain()">
@@ -42,6 +55,7 @@
         <img src="../images/poster/sponsor2.png" alt="Poster 2" class="poster" style="opacity: 0;">
         <img src="../images/poster/sponsor3.png" alt="Poster 3" class="poster" style="opacity: 0;">
     </div>
+    <div class="touch-text">Touch to Start</div>
 
     <script>
         const posters = document.querySelectorAll('.poster');

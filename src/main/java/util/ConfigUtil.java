@@ -7,25 +7,33 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ConfigUtil {
-    private static final Properties properties = new Properties();
-    private static final Logger logger = LogManager.getLogger(QRCodeUtil.class);
+    private static final Properties configProperties = new Properties();
+    private static final Properties mailProperties = new Properties();
+    private static final Logger logger = LogManager.getLogger(ConfigUtil.class);
 
     static {
-        try (InputStream input = ConfigUtil.class.getClassLoader().getResourceAsStream("config.properties")) {
+        loadProperties("config.properties", configProperties);
+        loadProperties("mail.properties", mailProperties);
+    }
+
+    private static void loadProperties(String fileName, Properties properties) {
+        try (InputStream input = ConfigUtil.class.getClassLoader().getResourceAsStream(fileName)) {
             if (input == null) {
-                logger.warn("Unable to load the config properties file");
-                throw new RuntimeException("Unable to find config.properties");
+                logger.error(fileName + " file not found");
+                throw new IOException(fileName + " file not found");
             }
             properties.load(input);
+            logger.info("Loaded " + fileName + " successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error("Failed to load configuration properties file: " + e.getMessage());
-            throw new RuntimeException("Failed to load configuration: " + e.getMessage());
+            logger.error("Failed to load " + fileName + ": " + e.getMessage(), e);
         }
     }
 
     public static String getProperty(String key) {
-        return properties.getProperty(key);
+        return configProperties.getProperty(key);
+    }
+
+    public static String getMailConfig(String key) {
+        return mailProperties.getProperty(key);
     }
 }
-

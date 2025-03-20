@@ -160,7 +160,6 @@
                 { name: 'Advisor Form', link: '<%= ConfigUtil.getProperty("coop.advisor") %>', description: 'COOP201, COOP202' },
                 { name: 'Company Form', link: '<%= ConfigUtil.getProperty("coop.company") %>', description: 'COOP301, COOP302, COOP303, COOP304' }
             ],
-            Disbursement: []
         };
 
         // Display the appropriate document list

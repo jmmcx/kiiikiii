@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationModel {
@@ -20,6 +21,10 @@ public class ReservationModel {
     private String status;
     private String createdAt;
     private String updatedAt;
+
+    public ReservationModel(){
+        
+    }
 
     public ReservationModel(String bookingId, String name, String email, String phone, String organization, String city, String country, int numVisitors, List<String> visitorNames, List<String> visitorAges, String location, String bookingDate, String timeSlot, String mergedTimeSlots, String status, String createdAt, String updatedAt) {
         this.bookingId = bookingId;
@@ -92,4 +97,44 @@ public class ReservationModel {
 
     public String getMergedTimeSlots() { return mergedTimeSlots; }
     public void setMergedTimeSlot(String mergedTimeSlots) { this.mergedTimeSlots = mergedTimeSlots; }
+
+    public String getMergedTimeSlot() {
+        if (timeSlot == null || timeSlot.isEmpty()) {
+            return "";
+        }
+
+        String[] slots = timeSlot.split(",");
+        if (slots.length == 0) {
+            return "";
+        }
+
+        List<String> mergedSlots = new ArrayList<>();
+        String startTime = null;
+        String endTime = null;
+
+        for (int i = 0; i < slots.length; i++) {
+            String[] times = slots[i].split("-");
+            if (startTime == null) {
+                startTime = times[0];
+                endTime = times[1];
+            } else {
+                // Check if current slot starts at previous slot's end time
+                if (times[0].equals(endTime)) {
+                    endTime = times[1];
+                } else {
+                    // Add the completed merged slot and start a new one
+                    mergedSlots.add(startTime + "-" + endTime);
+                    startTime = times[0];
+                    endTime = times[1];
+                }
+            }
+            
+            // Add the last slot
+            if (i == slots.length - 1) {
+                mergedSlots.add(startTime + "-" + endTime);
+            }
+        }
+
+        return String.join(", ", mergedSlots);
+    }
 }

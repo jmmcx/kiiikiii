@@ -186,7 +186,7 @@
   <div class="container">
     <a href="3dmodel.jsp" class="video-link">
       <video class="community-video" autoplay muted loop>
-        <source src="../3dModel/3dmodel.webm" type="video/webm">
+        <source src="../3dModel/movingmodel.mp4" type="video/mp4">
         Your browser does not support the video tag.
       </video>
     </a>
@@ -306,7 +306,7 @@
         <div class="faq-toggle">▼</div>
       </div>
       <div class="faq-answer">
-        Check out more info from this link: <a href="https://rai.kmitl.ac.th/avada_portfolio/rai/" target="_blank">RAI Official Website</a>
+        Check out more info from this link: <a href="homefaq_detail.jsp?type=raiofficialwebsite">RAI Official Website</a>
       </div>
       <div class="sponsor-container">
         <div class="sponsor-slider">

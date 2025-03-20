@@ -46,7 +46,7 @@ public class VisitorCheckInServlet extends HttpServlet {
             ReservationModel reservation = reservationDAO.getReservationByBookingID(qrValue);
             
             if (reservation != null) {
-                // Update reservation status to "check-in" if status is "confirmed" (a;ready handle in room_booking jsp page)
+                // Update reservation status to "check-in" if status is "confirmed" (already handle in checkin jsp page)
                 boolean updateSuccess = reservationDAO.updateReservationStatus(qrValue, "check-in");
                 
                 if (updateSuccess) {
@@ -55,7 +55,7 @@ public class VisitorCheckInServlet extends HttpServlet {
                     session.setAttribute("reservation", reservation);
                     
                     // Redirect to check-in success page
-                    response.sendRedirect(request.getContextPath() + "/pages/room_booking/checkin_success.jsp");
+                    response.sendRedirect(request.getContextPath() + "/pages/visitor_booking/checkin_success.jsp");
                 } else {
                     // Handle status update failure
                     sendErrorResponse(response, "Failed to update reservation status");
