@@ -186,7 +186,7 @@
   <div class="container">
     <a href="3dmodel.jsp" class="video-link">
       <video class="community-video" autoplay muted loop>
-        <source src="../3dModel/movingmodel.mp4" type="video/mp4">
+        <source src="../3dModel/3DVIDVAVDO.webm" type="video/webm">
         Your browser does not support the video tag.
       </video>
     </a>
