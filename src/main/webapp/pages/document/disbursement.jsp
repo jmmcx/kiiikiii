@@ -253,7 +253,7 @@
     <script type="text/javascript">
         // Function to redirect to the welcome page after 3 minutes (180000 milliseconds)
         function redirectToWelcomePage() {
-            window.location.href = 'welcome.jsp'; 
+            window.location.href = '../welcome.jsp'; 
         }
 
         // Set a timer to call the redirect function after 3 minutes

@@ -144,19 +144,19 @@
                 name: 'Engineering Gym', 
                 description: 'A multi-purpose sports facility offering basketball and volleyball courts, providing a space for physical activities and recreational sports for engineering students and staff.'
             },
-            'Construction_ENG': { 
+            'Construction_building': { 
                 name: 'Engineering Construction Building', 
                 description: 'A hub for civil and construction engineering, featuring labs, workshops, and classrooms for hands-on learning'
             },
-            'Mechanical_Building': { 
+            'Mechanical_building': { 
                 name: 'Mechanical Engineering Building', 
                 description: 'Home to mechanical engineering labs and classrooms, supporting practical learning and research in mechanics and design.'
             },
-            'IMSEENG&_Auditorium_ENG': { 
+            'IMSE': { 
                 name: 'IMSE Engineering & Auditorium', 
                 description: 'A facility for industrial management and systems engineering, featuring classrooms and an auditorium for lectures and events.'
             },
-            'Clubs_Building': { 
+            'Clubs_building': { 
                 name: 'Student Clubs Building', 
                 description: 'A space for student organizations, offering meeting rooms and activity areas for clubs and extracurricular activities.'
             },
@@ -172,62 +172,71 @@
                 name: 'KMITL Engineering Student Association',
                 description: 'A hub for engineering student activities, organizing events, academic support, and community engagement.'
             },
-            'Argri&_AEFood&_CHEMENG-_concrete,_geo_lab': {
+            'Chem_building': {
                 name: 'Agri & AE Food & Chem Eng Building',
                 description: 'Hosts labs and facilities for agricultural, food, chemical, and environmental engineering, including concrete and geotechnical labs.'
             },
-            'E12_Building001_Small': {
+            'E12-small': {
                 name: 'E-12 Building',
                 description: 'A multi-story engineering facility with classrooms, labs, and offices, supporting education and research across various engineering fields.'
             },
-            'E12_Building_BIG': {
+            'E12-big': {
                 name: 'E-12 Building',
                 description: 'A multi-story engineering facility with classrooms, labs, and offices, supporting education and research across various engineering fields.'
             }, 
-            'e12-park': {
+            'E12-park': {
                 name: 'E-12 Parking Lot',
                 description: 'A designated parking area near E-12 Building for students, faculty, and staff.'
             },
-            'archetechture-park': {
+            'Architecture-park': {
                 name: 'Architecture Parking Lot',
                 description: 'A parking area near the Architecture Building, serving students, faculty, and teachers.'
             },
-            'Plane008': {
+            'Telecom_building': {
                 name: 'Telecommunications Engineering Department',
                 description: 'Focused on communication technology, offering labs and classrooms for wireless networks, signal processing, and telecom research.'
             },
-            'Plane002': {
+            'A_building': {
                 name: 'Dean’s Building (Building A)',
                 description: 'Administrative center of the Faculty of Engineering, housing the dean’s office and faculty offices.'
             },
-            'Plane010': {
-                name: 'KMITL VB',
-                description: 'A volleyball club for students and staff, providing a space for training, practice, and recreational games.'
+            'Frontarchi': {
+                name: 'Art museum',
+                description: 'An Art museum showing architecture’s student work and project.'
             },
-            'Plane007': {
+            'B_building': {
                 name: 'Building B',
                 description: 'Hub for Electronics and Biomedical Engineering, featuring labs and classrooms for cutting-edge tech and healthcare solutions.'
             },
-            'Plane016': {
-                name: 'Cafeteria B',
+            'CafeteriaJ': {
+                name: 'Cafeteria J',
                 description: 'A dining spot near B Building, offering a variety of meals and snacks for students, teachers, and staff'
             },
-            'Plane015': {
+            'Industrial_building': {
                 name: 'Industrial Engineering Building',
                 description: 'Dedicated to industrial engineering studies, featuring labs, classrooms, and research facilities for process optimization and systems engineering.'
             },
-            'Plane017': {
-                name : 'Argriculture Reserach',
+            'Agri_building': {
+                name : 'Agriculture Research',
                 description: 'A center for agricultural studies, featuring labs and facilities for research in farming, food science, and sustainable agriculture.'
             },
-            'Plane013': {
-                name: 'Mechanics Lab',
-                description: 'A hands-on workspace for mechanical engineering students, equipped with tools and machinery for experiments and projects.'
+            'Rail_building': {
+                name: 'Rail Transportation Engineering',
+                description: 'A facility surrounded by rail simulations, featuring labs and workshops for railway engineering.'
             },
-            'Plane005': {
+            'CafeteriaC': {
                 name: 'Cafeteria C',
                 description: 'A dining area near E-12 Building, offering a variety of meals and refreshments for students and staff.'
+            },
+            'Instrumental_building': {
+                name: 'Instrumental Engineering Building',
+                description: 'A hub for precision measurement, automation, and control system studies.'
+            },
+            'CNC_workshop': {
+                name: 'Engineering Fabrication Laboratory',
+                description: 'A hands-on workshop for prototyping and manufacturing engineering projects.'
             }
+
 
         };
 

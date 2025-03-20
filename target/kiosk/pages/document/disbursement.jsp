@@ -53,7 +53,6 @@
 
         .document-list {
             max-width: 900px;
-            margin-top: 50px;
             padding: 20px;
         }
 
