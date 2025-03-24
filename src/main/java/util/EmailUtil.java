@@ -72,19 +72,19 @@ public class EmailUtil {
             + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }"
             + ".container { max-width: 600px; margin: 0 auto; padding: 20px; }"
             + "h2 { color: #4285f4; }"
-            + "h3 { margin-top: 30px; }" // Added more top margin to h3
+            + "h3 { margin-top: 30px; }"
             + "table { border-collapse: collapse; width: 100%; margin-top: 20px; }"
             + "th { background-color: #f2f2f2; text-align: left; padding: 8px; border: 1px solid #ddd; }"
             + ".footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #777; }"
-            + ".visitor-section { margin-top: 40px; }" // Added this class for visitor section
+            + ".visitor-section { margin-top: 40px; }"
             + "</style>"
             + "</head>"
             + "<body>"
             + "<div class='container'>"
-            + "<h2>Booking Request Confirmation</h2>"
+            + "<h2>Booking Request - Awaiting Confirmation</h2>"
             + "<p>Dear " + fullName + ",</p>"
-            + "<p>Thank you for your booking request at RAI Department. We have received your request and it is currently under review. We will notify you once your booking is confirmed.</p>"
-            + "<h3>Booking Details:</h3>"
+            + "<p>Thank you for your booking request at RAI Department. We have received your request, and it is currently pending confirmation. You will receive a separate email once your booking is approved.</p>"
+            + "<h3>Booking Details (Pending Approval):</h3>"
             + "<table>"
             + "<tr><th style='width: 30%; padding: 8px; border: 1px solid #ddd;'>Booking ID</th><td style='padding: 8px; border: 1px solid #ddd;'>" + bookingId + "</td></tr>"
             + "<tr><th style='padding: 8px; border: 1px solid #ddd;'>Name</th><td style='padding: 8px; border: 1px solid #ddd;'>" + fullName + "</td></tr>"
@@ -95,7 +95,6 @@ public class EmailUtil {
             + "<tr><th style='padding: 8px; border: 1px solid #ddd;'>Time Slot</th><td style='padding: 8px; border: 1px solid #ddd;'>" + formattedTimeSlot + "</td></tr>"
             + "<tr><th style='padding: 8px; border: 1px solid #ddd;'>Number of Visitors</th><td style='padding: 8px; border: 1px solid #ddd;'>" + numVisitors + "</td></tr>"
             + "</table>"
-
             + "<div class='visitor-section'>"
             + "<h3>Visitor Details:</h3>"
             + "<table>"
@@ -107,9 +106,9 @@ public class EmailUtil {
             + visitorDetails.toString()
             + "</table>"
             + "</div>"
-
             + "<div class='footer'>"
-            + "<p>If you have any questions or need to make changes to your booking, please contact us at <a href='mailto:rai@kmitl.ac.th'>rai@kmitl.ac.th</a> or call +66 2123 4567.</p>"
+            + "<p>Please wait for approval. You will be notified once your booking is confirmed.</p>"
+            + "<p>For questions or changes, contact us at <a href='mailto:rai@kmitl.ac.th'>rai@kmitl.ac.th</a> or call 02 329 8301 ext. 232.</p>"
             + "<p>Best regards,<br>RAI Department<br>King Mongkut's Institute of Technology Ladkrabang</p>"
             + "</div>"
             + "</div>"
@@ -117,7 +116,7 @@ public class EmailUtil {
             + "</html>";
     }
 
-    // Create email content for student booking confirmation
+    // Create email content for student booking request received
     public static String createStudentBookingEmailContent(String fullName, String bookingId, 
                                                         String location, String date, 
                                                         String timeSlot, String phone,
@@ -160,7 +159,7 @@ public class EmailUtil {
             + "<style>"
             + "body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }"
             + ".container { max-width: 600px; margin: 0 auto; padding: 20px; }"
-            + "h2 { color: #e35205; }" // Changed to match RAI orange color
+            + "h2 { color: #e35205; }"
             + "h3 { margin-top: 30px; }"
             + "table { border-collapse: collapse; width: 100%; margin-top: 20px; }"
             + "th { background-color: #f2f2f2; text-align: left; padding: 8px; border: 1px solid #ddd; }"
@@ -169,10 +168,10 @@ public class EmailUtil {
             + "</head>"
             + "<body>"
             + "<div class='container'>"
-            + "<h2>Common Area Booking Confirmation</h2>"
+            + "<h2>Booking Request - Awaiting Confirmation</h2>"
             + "<p>Dear " + fullName + ",</p>"
-            + "<p>Thank you for your booking at RAI Department. We have received your request and it is currently under review. We will notify you once your booking is confirmed.</p>"
-            + "<h3>Booking Details:</h3>"
+            + "<p>Thank you for your booking request at RAI Department. We have received your request, and it is currently pending confirmation. You will receive a separate email with a QR code once your booking is approved.</p>"
+            + "<h3>Booking Details (Pending Approval):</h3>"
             + "<table>"
             + "<tr><th style='width: 30%; padding: 8px; border: 1px solid #ddd;'>Booking ID</th><td style='padding: 8px; border: 1px solid #ddd;'>" + bookingId + "</td></tr>"
             + "<tr><th style='padding: 8px; border: 1px solid #ddd;'>Name</th><td style='padding: 8px; border: 1px solid #ddd;'>" + fullName + "</td></tr>"
@@ -182,10 +181,9 @@ public class EmailUtil {
             + "<tr><th style='padding: 8px; border: 1px solid #ddd;'>Time Slot</th><td style='padding: 8px; border: 1px solid #ddd;'>" + formattedTimeSlot + "</td></tr>"
             + "<tr><th style='padding: 8px; border: 1px solid #ddd;'>Seat</th><td style='padding: 8px; border: 1px solid #ddd;'>" + formattedSeatCode + "</td></tr>"
             + "</table>"
-
             + "<div class='footer'>"
-            + "<p>After approval, QR code will be sent to your email. Please check-in within 15 minutes from the time reserved. Late check-in will cause a penalty and auto cancellation.</p>"
-            + "<p>If you have any questions or need to make changes to your booking, please contact us at <a href='mailto:rai@kmitl.ac.th'>rai@kmitl.ac.th</a>.</p>"
+            + "<p>Please wait for approval. Upon confirmation, a QR code will be sent to your email. You must check in within 15 minutes of your reserved time, or your booking may be subject to penalties or cancellation.</p>"
+            + "<p>For questions or changes, contact us at <a href='mailto:rai@kmitl.ac.th'>rai@kmitl.ac.th</a> or call 02 329 8301 ext. 232.</p>"
             + "<p>Best regards,<br>RAI Department<br>King Mongkut's Institute of Technology Ladkrabang</p>"
             + "</div>"
             + "</div>"
