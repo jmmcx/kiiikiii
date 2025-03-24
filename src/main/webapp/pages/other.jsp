@@ -110,10 +110,11 @@
 <body>
     <div class="grid-container">
         <a href="contact.jsp" class="grid-item"><img src="../images/icon/contact2.png" alt="Contact">CONTACT</a>
-        <a href="room_booking/room_booking.jsp" class="grid-item"><img src="../images/icon/roombooking.png" alt="Room">ROOM BOOKING</a>
+        <a href="visitor_booking/checkin.jsp" class="grid-item"><img src="../images/icon/roombooking.png" alt="Room">ROOM BOOKING</a>
         <a href="document/document.jsp" class="grid-item"><img src="../images/icon/document.png" alt="Document">DOCUMENT</a>
         <a href="information.jsp" class="grid-item"><img src="../images/icon/information.png" alt="Info">INFORMATION</a>
-        <a href="emergency.jsp" class="grid-item"><img src="../images/icon/emergency.png" alt="Emergency">EMERGENCY</a>
+        <!-- <a href="emergency.jsp" class="grid-item"><img src="../images/icon/emergency.png" alt="Emergency">EMERGENCY</a> -->
+        <a href="visitor_booking/visit_scheduler.jsp" class="grid-item"><img src="../images/icon/visitor_booking.png" alt="visitor">Visitor Register</a>
         <a href="curriculum.jsp" class="grid-item"><img src="../images/icon/curriculum.png" alt="Curriculum">CURRICULUM</a>
         <a href="academic_calendar.jsp" class="grid-item"><img src="../images/icon/academiccalendar.png" alt="Calendar">ACADEMIC CALENDAR</a>
         <a href="event/event.jsp" class="grid-item"><img src="../images/icon/event.png" alt="Event">EVENT</a>
