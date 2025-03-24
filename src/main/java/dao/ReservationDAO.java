@@ -314,20 +314,35 @@ public class ReservationDAO {
         return reservation;
     }
 
-    // Get available time slots for a date and location
+    /**
+     * Get available time slots for a date and location
+     * @param date The date to check
+     * @param location The location name
+     * @return List of available time slots
+     */
     public List<String> getAvailableTimeSlots(String date, String location) throws Exception {
         logger.info("Fetching available time slots for date: {}, location: {}", date, location);
         List<String> availableSlots = new ArrayList<>();
         List<String> bookedSlots = new ArrayList<>();
-    
+        List<String> lockedSlots = new ArrayList<>();
+
+        // First check if the date is fully locked
+        if (isDateLocked(date)) {
+            return availableSlots; // Return empty list if date is fully locked
+        }
+        
+        // Get time slots that are partially locked
+        lockedSlots = getLockedTimeSlots(date, location);
+
+        // Get booked slots from database
         String query = "SELECT TimeSlot FROM visitor_bookings WHERE Location = ? AND BookingDate = ? AND Status != 'cancelled'";
-    
+
         try (Connection connection = dBConnection.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-    
+            PreparedStatement stmt = connection.prepareStatement(query)) {
+
             stmt.setString(1, location.trim());
             stmt.setString(2, date);
-    
+
             ResultSet resultSet = stmt.executeQuery();
             
             while (resultSet.next()) {
@@ -337,19 +352,35 @@ public class ReservationDAO {
                 }
             }
         }
-    
+
+        // Check current time for today's date
+        boolean isToday = date.equals(java.time.LocalDate.now().toString());
+        java.time.LocalTime currentTime = isToday ? java.time.LocalTime.now() : null;
+
         List<String> allTimeSlots = Arrays.asList(
             "09:00-09:30", "09:30-10:00", "10:00-10:30", "10:30-11:00",
             "11:00-11:30", "11:30-12:00", "13:00-13:30", "13:30-14:00",
             "14:00-14:30", "14:30-15:00", "15:00-15:30", "15:30-16:00"
         );
-    
+
         for (String slot : allTimeSlots) {
-            if (!bookedSlots.contains(slot)) {
-                availableSlots.add(slot);
+            // Skip if slot is booked or locked
+            if (bookedSlots.contains(slot) || lockedSlots.contains(slot)) {
+                continue;
             }
+            
+            // Skip past time slots for today
+            if (isToday) {
+                String endTime = slot.split("-")[1];
+                java.time.LocalTime slotEndTime = java.time.LocalTime.parse(endTime);
+                if (currentTime.isAfter(slotEndTime)) {
+                    continue;
+                }
+            }
+            
+            availableSlots.add(slot);
         }
-    
+
         logger.info("Available time slots for date: {}, location: {} -> {}", date, location, availableSlots);
         return availableSlots;
     }
@@ -593,15 +624,17 @@ public class ReservationDAO {
         try {
             conn = dBConnection.getConnection();
             
+            // Check for fully locked dates (no time specified)
             String sql = "SELECT 1 FROM lock_dates " +
-                        "WHERE LockDate = ? AND BookingType = 'visitor'";
+                        "WHERE LockDate = ? AND BookingType = 'visitor' " +
+                        "AND (start_time IS NULL OR end_time IS NULL)";
             
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, dateString);
             
             rs = pstmt.executeQuery();
             
-            isLocked = rs.next(); // If any record exists, date is locked
+            isLocked = rs.next(); // If any record exists, date is fully locked
             
         } catch (SQLException e) {
             logger.error("Error checking if date {} is locked", dateString, e);
@@ -619,5 +652,86 @@ public class ReservationDAO {
         }
         
         return isLocked;
+    }
+    /**
+     * Gets locked time slots for a specific date
+     * 
+     * @param dateString The date to check in 'yyyy-MM-dd' format
+     * @param location The location code (RB, FT)
+     * @return List of locked time slots for the date
+     */
+    public List<String> getLockedTimeSlots(String dateString, String location) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<String> lockedSlots = new ArrayList<>();
+        
+        try {
+            conn = dBConnection.getConnection();
+            
+            // Convert location to place_code
+            String placeCode = "RB"; // Default to Robotics Lab
+            if (location.contains("Future")) {
+                placeCode = "FT";
+            }
+            
+            String sql = "SELECT start_time, end_time FROM lock_dates " +
+                        "WHERE LockDate = ? AND BookingType = 'visitor' " +
+                        "AND start_time IS NOT NULL AND end_time IS NOT NULL " +
+                        "AND place_code = ?";
+            
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, dateString);
+            pstmt.setString(2, placeCode);
+            
+            rs = pstmt.executeQuery();
+            
+            // Standard time slots
+            List<String> allTimeSlots = Arrays.asList(
+                "09:00-09:30", "09:30-10:00", "10:00-10:30", "10:30-11:00",
+                "11:00-11:30", "11:30-12:00", "13:00-13:30", "13:30-14:00",
+                "14:00-14:30", "14:30-15:00", "15:00-15:30", "15:30-16:00"
+            );
+            
+            // Process each lock range and determine which slots are affected
+            while (rs.next()) {
+                java.sql.Time startTime = rs.getTime("start_time");
+                java.sql.Time endTime = rs.getTime("end_time");
+                
+                // Convert to strings for comparison
+                String startTimeStr = startTime.toString().substring(0, 5); // HH:MM
+                String endTimeStr = endTime.toString().substring(0, 5); // HH:MM
+                
+                for (String timeSlot : allTimeSlots) {
+                    String[] parts = timeSlot.split("-");
+                    String slotStart = parts[0];
+                    String slotEnd = parts[1];
+                    
+                    // If the slot starts after or at the lock start time and before or at the lock end time
+                    // OR if the slot ends after the lock start time and before or at the lock end time
+                    if ((slotStart.compareTo(startTimeStr) >= 0 && slotStart.compareTo(endTimeStr) < 0) ||
+                        (slotEnd.compareTo(startTimeStr) > 0 && slotEnd.compareTo(endTimeStr) <= 0) ||
+                        (slotStart.compareTo(startTimeStr) <= 0 && slotEnd.compareTo(endTimeStr) >= 0)) {
+                        lockedSlots.add(timeSlot);
+                    }
+                }
+            }
+            
+        } catch (SQLException e) {
+            logger.error("Error getting locked time slots for date {} and location {}", dateString, location, e);
+        } catch (Exception e) {
+            logger.error("Unexpected error while getting locked time slots: {}", e.getMessage(), e);
+        } finally {
+            // Close resources
+            try {
+                if (rs != null) rs.close();
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                logger.error("Error closing database resources", e);
+            }
+        }
+        
+        return lockedSlots;
     }
 }
