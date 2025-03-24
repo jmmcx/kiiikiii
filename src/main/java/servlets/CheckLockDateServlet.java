@@ -2,6 +2,9 @@ package servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import dao.ReservationDAO;
 
-@WebServlet("/CheckLockDateServlet") // for visitor
+@WebServlet("/CheckLockDateServlet")
 public class CheckLockDateServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
@@ -19,15 +22,38 @@ public class CheckLockDateServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         String dateStr = request.getParameter("date");
-        boolean isLocked = false;
+        String location = request.getParameter("location");
+        
+        // Default to empty response
+        boolean isFullyLocked = false;
+        List<String> lockedTimeSlots = new ArrayList<>();
         
         if (dateStr != null && !dateStr.isEmpty()) {
             ReservationDAO dao = new ReservationDAO();
-            isLocked = dao.isDateLocked(dateStr);
+            
+            // Check if date is fully locked
+            isFullyLocked = dao.isDateLocked(dateStr);
+            
+            // If not fully locked and location is provided, get locked time slots
+            if (!isFullyLocked && location != null && !location.isEmpty()) {
+                lockedTimeSlots = dao.getLockedTimeSlots(dateStr, location);
+            }
         }
         
-        // Send JSON response
-        out.print("{\"locked\":" + isLocked + "}");
+        // Build JSON response
+        StringBuilder jsonBuilder = new StringBuilder();
+        jsonBuilder.append("{\"fullyLocked\":");
+        jsonBuilder.append(isFullyLocked);
+        jsonBuilder.append(",\"lockedTimeSlots\":[");
+        
+        for (int i = 0; i < lockedTimeSlots.size(); i++) {
+            if (i > 0) jsonBuilder.append(",");
+            jsonBuilder.append("\"").append(lockedTimeSlots.get(i)).append("\"");
+        }
+        
+        jsonBuilder.append("]}");
+        
+        out.print(jsonBuilder.toString());
         out.flush();
     }
 }
