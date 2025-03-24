@@ -78,9 +78,9 @@ public class StudentBookingDAO {
     }
 
     /**
-     * Retrieves all lock dates that are greater than or equal to the current date
+     * Retrieves all lock dates and time slots that are greater than or equal to the current date
      * 
-     * @return List of Maps containing lock date details, or an empty list if none found or an error occurs
+     * @return List of Maps containing lock date and time slot details, or an empty list if none found or an error occurs
      */
     public List<Map<String, Object>> getLockDatesFromCurrentDate() {
         Connection conn = null;
@@ -95,9 +95,9 @@ public class StudentBookingDAO {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String currentDate = dateFormat.format(new Date());
             
-            String sql = "SELECT LockID, place_code, LockDate, LockReason, BookingType " +
-             "FROM lock_dates " +
-             "WHERE LockDate >= ? AND BookingType = 'student'";
+            String sql = "SELECT LockID, place_code, LockDate, start_time, end_time, LockReason, BookingType " +
+                        "FROM lock_dates " +
+                        "WHERE LockDate >= ? AND BookingType = 'student'";
 
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, currentDate);
@@ -109,12 +109,14 @@ public class StudentBookingDAO {
                 lockDate.put("LockID", rs.getString("LockID"));
                 lockDate.put("place_code", rs.getString("place_code"));
                 lockDate.put("LockDate", rs.getDate("LockDate"));
+                lockDate.put("start_time", rs.getTime("start_time"));
+                lockDate.put("end_time", rs.getTime("end_time"));
                 lockDate.put("LockReason", rs.getString("LockReason"));
                 lockDate.put("BookingType", rs.getString("BookingType"));
                 lockDatesList.add(lockDate);
             }
             
-            logger.info("Retrieved {} lock dates from the current date: {}", lockDatesList.size(), currentDate);
+            logger.info("Retrieved {} lock dates/time slots from the current date: {}", lockDatesList.size(), currentDate);
             
         } catch (SQLException e) {
             logger.error("Error retrieving lock dates from the current date", e);
