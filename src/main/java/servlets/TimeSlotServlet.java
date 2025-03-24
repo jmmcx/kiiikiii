@@ -3,6 +3,8 @@ package servlets;
 import dao.ReservationDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +25,10 @@ public class TimeSlotServlet extends HttpServlet {
 
     public TimeSlotServlet() {
         try {
-            this.dao = new ReservationDAO();  // Initialize safely inside try-catch
+            this.dao = new ReservationDAO();
         } catch (Exception e) {
-            e.printStackTrace(); // Log the error for debugging
-            throw new RuntimeException("Failed to initialize GoogleSheetsDAO", e);
+            logger.error("Failed to initialize ReservationDAO", e);
+            throw new RuntimeException("Failed to initialize ReservationDAO", e);
         }
     }
 
@@ -39,26 +41,52 @@ public class TimeSlotServlet extends HttpServlet {
         String selectedLocation = request.getParameter("location");
         List<String> availableSlots;
         boolean isFullyBooked;
+        boolean isDateLocked = false;
+        List<String> lockedTimeSlots = new ArrayList<>();
 
         try {
-            availableSlots = dao.getAvailableTimeSlots(selectedDate, selectedLocation);
-            isFullyBooked = dao.isDateFullyBooked(selectedDate, selectedLocation);
+            // Check if date is before today
+            LocalDate date = LocalDate.parse(selectedDate);
+            LocalDate today = LocalDate.now();
+            
+            if (date.isBefore(today)) {
+                // Past date, no slots available
+                availableSlots = List.of();
+                isFullyBooked = true;
+            } else {
+                // Check if date is locked
+                isDateLocked = dao.isDateLocked(selectedDate);
+                
+                if (isDateLocked) {
+                    // Date is fully locked
+                    availableSlots = List.of();
+                    isFullyBooked = true;
+                } else {
+                    // Get time-specific locks
+                    lockedTimeSlots = dao.getLockedTimeSlots(selectedDate, selectedLocation);
+                    
+                    // Get available slots (includes time lock and current time checking)
+                    availableSlots = dao.getAvailableTimeSlots(selectedDate, selectedLocation);
+                    isFullyBooked = dao.isDateFullyBooked(selectedDate, selectedLocation);
+                }
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            availableSlots = List.of(); // Return an empty list in case of error
+            logger.error("Error fetching time slots", e);
+            availableSlots = List.of();
             isFullyBooked = false;
         }
 
         Map<String, Object> jsonResponse = new HashMap<>();
         jsonResponse.put("availableSlots", availableSlots);
         jsonResponse.put("isFullyBooked", isFullyBooked);
+        jsonResponse.put("isDateLocked", isDateLocked);
+        jsonResponse.put("lockedTimeSlots", lockedTimeSlots);
 
         String json = new Gson().toJson(jsonResponse);
         PrintWriter out = response.getWriter();
         out.print(json);
         out.flush();
 
-        logger.info("Returning JSON: {}", new Gson().toJson(jsonResponse));
-
+        logger.info("Returning JSON: {}", json);
     }
 }
