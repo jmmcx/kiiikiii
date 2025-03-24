@@ -9,11 +9,13 @@ import org.apache.logging.log4j.Logger;
 public class ConfigUtil {
     private static final Properties configProperties = new Properties();
     private static final Properties mailProperties = new Properties();
+    private static final Properties dBProperties = new Properties();
     private static final Logger logger = LogManager.getLogger(ConfigUtil.class);
 
     static {
         loadProperties("config.properties", configProperties);
         loadProperties("mail.properties", mailProperties);
+        loadProperties("dBconfig.properties", dBProperties);
     }
 
     private static void loadProperties(String fileName, Properties properties) {
@@ -35,5 +37,9 @@ public class ConfigUtil {
 
     public static String getMailConfig(String key) {
         return mailProperties.getProperty(key);
+    }
+
+    public static String getDBConfig(String key) {
+        return dBProperties.getProperty(key);
     }
 }
