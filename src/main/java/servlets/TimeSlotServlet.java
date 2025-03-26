@@ -54,11 +54,11 @@ public class TimeSlotServlet extends HttpServlet {
                 availableSlots = List.of();
                 isFullyBooked = true;
             } else {
-                // Check if date is locked
-                isDateLocked = dao.isDateLocked(selectedDate);
+                // Check if date is locked for this location
+                isDateLocked = dao.isDateLocked(selectedDate, selectedLocation);
                 
                 if (isDateLocked) {
-                    // Date is fully locked
+                    // Date is fully locked for this location
                     availableSlots = List.of();
                     isFullyBooked = true;
                 } else {
