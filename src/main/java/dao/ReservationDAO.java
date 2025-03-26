@@ -326,9 +326,9 @@ public class ReservationDAO {
         List<String> bookedSlots = new ArrayList<>();
         List<String> lockedSlots = new ArrayList<>();
 
-        // First check if the date is fully locked
-        if (isDateLocked(date)) {
-            return availableSlots; // Return empty list if date is fully locked
+        // First check if the date is fully locked for this location
+        if (isDateLocked(date, location)) {
+            return availableSlots; // Return empty list if date is fully locked for this location
         }
         
         // Get time slots that are partially locked
@@ -610,12 +610,13 @@ public class ReservationDAO {
     }
 
     /**
-     * Checks if a specific date is locked for visitor bookings
+     * Checks if a specific date is locked for visitor bookings at a specific location
      *
      * @param dateString The date to check in 'yyyy-MM-dd' format
-     * @return true if the date is locked, false otherwise
+     * @param location The location name (e.g., "HM Building, Robotics Lab" or "E-12 Building, Future Lab")
+     * @return true if the date is locked for the specified location, false otherwise
      */
-    public boolean isDateLocked(String dateString) {
+    public boolean isDateLocked(String dateString, String location) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -624,20 +625,28 @@ public class ReservationDAO {
         try {
             conn = dBConnection.getConnection();
             
-            // Check for fully locked dates (no time specified)
+            // Convert location to place_code
+            String placeCode = "RB"; // Default to Robotics Lab
+            if (location != null && location.contains("Future")) {
+                placeCode = "FT";
+            }
+            
+            // Check for fully locked dates (no time specified) for the specific location
             String sql = "SELECT 1 FROM lock_dates " +
                         "WHERE LockDate = ? AND BookingType = 'visitor' " +
-                        "AND (start_time IS NULL OR end_time IS NULL)";
+                        "AND (start_time IS NULL OR end_time IS NULL) " +
+                        "AND place_code = ?";
             
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, dateString);
+            pstmt.setString(2, placeCode);
             
             rs = pstmt.executeQuery();
             
-            isLocked = rs.next(); // If any record exists, date is fully locked
+            isLocked = rs.next(); // If any record exists, date is fully locked for this location
             
         } catch (SQLException e) {
-            logger.error("Error checking if date {} is locked", dateString, e);
+            logger.error("Error checking if date {} is locked for location {}", dateString, location, e);
         } catch (Exception e) {
             logger.error("Unexpected error while checking locked date: {}", e.getMessage(), e);
         } finally {
@@ -653,6 +662,7 @@ public class ReservationDAO {
         
         return isLocked;
     }
+
     /**
      * Gets locked time slots for a specific date
      * 
