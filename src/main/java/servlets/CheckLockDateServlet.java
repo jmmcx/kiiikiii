@@ -31,8 +31,8 @@ public class CheckLockDateServlet extends HttpServlet {
         if (dateStr != null && !dateStr.isEmpty()) {
             ReservationDAO dao = new ReservationDAO();
             
-            // Check if date is fully locked
-            isFullyLocked = dao.isDateLocked(dateStr);
+            // Check if date is fully locked for this location
+            isFullyLocked = dao.isDateLocked(dateStr, location);
             
             // If not fully locked and location is provided, get locked time slots
             if (!isFullyLocked && location != null && !location.isEmpty()) {
