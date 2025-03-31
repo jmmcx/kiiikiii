@@ -28,6 +28,20 @@
             padding: 0;
             background-color: #f5f7fa;
         }
+
+        /* Back arrow styles - positioned appropriately */
+        .back-button {
+            position: fixed;
+            top: 50px;
+            left: 50px;
+            z-index: 100;
+        }
+    
+        .back-button img {
+            width: 70px;
+            height: 70px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -428,6 +442,12 @@
         // Reset calendar for rendering
         calendar.set(Calendar.DAY_OF_MONTH, 1);
     %>
+
+    <div class="back-button">
+        <a href="../other.jsp">
+            <img src="../../images/back_arrow_white.png" alt="Back" class="back-button img">
+        </a>
+    </div>
 
     <header>
         <div class="container">
