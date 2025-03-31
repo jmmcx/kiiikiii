@@ -30,6 +30,19 @@
     <title>Robotics and AI, KMITL - Room Reservation</title>
     <link rel="stylesheet" href="../../theme/register.css">
     <style>
+        /* Back arrow styles - positioned appropriately */
+        .back-button {
+            position: fixed;
+            top: 50px;
+            left: 40px;
+            z-index: 100;
+        }
+    
+        .back-button img {
+            width: 80px;
+            height: 80px;
+        }
+
         /* Custom popup styles */
         .popup {
             display: none;
@@ -132,6 +145,12 @@
     </style>
 </head>
 <body>
+    <div class="back-button">
+        <a href="visit_scheduler.jsp">
+            <img src="../../images/back_arrow.png" alt="Back" class="back-button img">
+        </a>
+    </div>
+
     <div class="container">
         <h2>Robotics and AI, KMITL</h2>
         <img src="../../images/rai_logo.png" alt="Logo">
