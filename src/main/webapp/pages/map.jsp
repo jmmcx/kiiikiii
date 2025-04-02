@@ -1,9 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.util.*" %>
-<%@ page import="util.LanguageUtil" %>  <!-- Import the utility class Language Switcher-->
-<%@ page import="util.ExcelReader" %> <!-- Import the utility class - Excel Reader-->
-<%@ page import="dao.LocationsDAO" %> <!-- Import the LocationsDAO -->
-<%@ page import="model.LocationsModel" %> <!-- Import the LocationsModel -->
+<%@ page import="util.LanguageUtil" %>
+<%@ page import="dao.LocationsDAO" %>
+<%@ page import="model.LocationsModel" %>
 
 <%
     // Get selected language (default to English)
@@ -18,9 +17,9 @@
     String startText = LanguageUtil.getMessage("start", lang);
     String endText = LanguageUtil.getMessage("end", lang);
     String swapText = LanguageUtil.getMessage("swap", lang);
+    String findRouteText = LanguageUtil.getMessage("search", lang);
     
     // Define hardcoded translations for buttons without resource bundle entries
-    String findRouteText = lang.equals("th") ? "ค้นหาเส้นทาง" : "Find Route";
     String toggle3DText = lang.equals("th") ? "สลับแผนที่ 3D" : "Toggle 3D Map";
 
     // Get locations from database
@@ -39,193 +38,474 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navigation</title>
+    <title>Campus Navigation</title>
     
     <!-- Link to CSS files -->
-    <link rel="stylesheet" href="../theme/menu.css">    <!-- Call menu bar -->
+    <link rel="stylesheet" href="../theme/menu.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <style type="text/css">
-
-        /* 🏹 Back Arrow - Always Visible & Scaling */
-        .back-arrow-container {
-            position: fixed;  /* Keep it fixed */
-            top: 15px;   /* Near the top */
-            left: 15px;  /* Near the left */
-            z-index: 1500;  /* Keep it above all elements */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
         }
 
-        .back-arrow {
-            width: max(2vw, 25px);   /* At least 25px but scales */
-            height: max(2vw, 25px);
-            cursor: pointer; /* Make it clickable */
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        /* 📱 Adjust for small screens */
-        @media screen and (max-width: 768px) {
-            .back-arrow {
-                width: max(4vw, 30px);  
-                height: max(4vw, 30px);
-            }
-            .language-toggle {
-                right: 10px; /* Less padding on small screens */
-            }
-            .language-toggle a {
-                font-size: max(1.2vw, 10px);
-                padding: 3px 5px;
-            }
-            .center {
-                gap: 0.2vw; /* Tighter gap on small screens */
-            }
-            .swap-button {
-                margin: 0 2px;
-            }
-        }
-
-        /* 🌍 Language Toggle (Right-Aligned) */
-        .language-toggle {
-            position: absolute;
-            right: 70px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: right;
-            white-space: nowrap;
-        }
-
-        .language-toggle a {
-            background: none; /* Transparent */
-            border: none;
-            font-size: max(1.2vw, 14px);
-            color: white; /* Change color to contrast with orange */
-            cursor: pointer;
-            padding: 5px 10px;
-            text-decoration: none;
-        }
-
-        /* Hover effect */
-        .language-toggle a:hover {
-            font-weight: bold;
-            color: #f0f0f0;
-        }
-
-        /* 🔶 Orange Background for Controls */
-        .controls {
-            position: fixed;  /* Keep at the top */
+        /* Header with logo and language toggle */
+        .header {
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;  /* Full width */
-            height: 10vh;  /* Height based on viewport */
-            background: #E35205;
+            width: 100%;
+            height: 100px;
+            background: #E35205; /* Updated to a more professional orange */
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0vh 2vw;  /* Adjust padding */
+            padding: 0 30px;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* 🎯 Center dropdowns & buttons */
-        .center {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1vw;
-            flex-wrap: wrap; /* Allow wrapping */
-        }
-
-        /* 🌐 Right-aligned elements (Language Toggle) */
-        .right {
+        .logo-container {
             display: flex;
             align-items: center;
-            gap: 1vw;
         }
 
-        .swap-button {
-            margin: 0 5px; /* Add some horizontal margin */
+        .back-button {
             background: none;
             border: none;
+            color: white;
+            font-size: 24px;
+            margin-right: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
         }
 
-        /* 🎛️ Dropdowns & Buttons */
-        select, button:not(.icon-button) {
-            flex: 8;
-            max-width: 15vw;  
-            min-width: 80px;  
-            padding: 1.5vh 1.5vw;
-            font-size: 1.3vw;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .back-button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .language-toggle {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-toggle a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .language-toggle a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Search controls container */
+        .search-container {
+            position: fixed;
+            top: 100px;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 20px 30px;
+            z-index: 900;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            grid-template-rows: auto auto;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .location-select {
+            position: relative;
+            grid-column: span 1;
+        }
+
+        .location-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #203864;
+            font-size: 20px;
+        }
+
+        .start-icon {
+            color: #4CAF50; /* Green for start */
+        }
+
+        .end-icon {
+            color: #F44336; /* Red for destination */
         }
 
         select {
-            color: #888; /* Light gray text for placeholder */
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            font-size: 16px;
+            color: #333;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
 
-        select option:first-child {
-            color: #888; /* Placeholder color */
+        select:focus {
+            outline: none;
+            border-color: #203864;
+            box-shadow: 0 0 0 3px rgba(32, 56, 100, 0.1);
         }
 
-        select option:not(:first-child) {
-            color: black; /* Actual options color */
+        select option {
+            color: #333;
         }
 
-        button {
-            background: white;
-            color: black;
-        }
-
-        /* Button Hover Effect */
-        button:hover {
-            background: #f0f0f0;
-        }
-
-        /* Labels for dropdowns */
-        label {
-            color: white;
-            font-size: 1.3vw;
-            margin-right: 5px;
-        }
-
-        .icon-button {
-            background: transparent;
+        .swap-button {
+            width: 50px;
+            height: 50px;
             border: none;
-            padding: 5px;
+            background-color: #203864;
+            color: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-           /* border-radius: 5px; */ 
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        .button-icon {
-            width: 24px;  /* Adjust size as needed */
-            height: 24px; /* Adjust size as needed */
-            object-fit: contain;
+        .swap-button:hover {
+            background-color: #152749;
+            transform: scale(1.05);
         }
 
-        .icon-button:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .swap-button i {
+            font-size: 20px;
         }
 
-        #map { 
-            width: 100%; 
-            height: calc(100vh - 10vh); /* Ensure it fills the remaining screen */
-            margin-top: 10vh; /* Push it down to avoid overlap */
+        .action-buttons {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
         }
-        /* route result */
+
+        .action-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .find-route-btn {
+            background-color: #203864;
+            color: white;
+        }
+
+        .find-route-btn:hover {
+            background-color: #152749;
+            transform: translateY(-2px);
+        }
+
+        .toggle-3d-btn {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .toggle-3d-btn:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        /* Map container */
+        #map {
+            width: 100%;
+            height: calc(100vh - 100px - 180px);
+            margin-top: 280px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Route results panel */
         #result {
-            position: absolute;
-            top: 10;
+            position: fixed;
             bottom: 0;
-            right: 0;
-            width: 1px;
-            height: 80%;
-            margin: auto;
-            border: 3px solid #dddddd;
-            background: #ffffff;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: white;
             overflow: auto;
-            z-index: 2;
+            z-index: 800;
+            transition: height 0.3s ease-in-out;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            overflow-y: auto !important;
+        }
+
+        #result.active {
+            height: 40% !important;
+            overflow-y: auto !important;
+        }
+
+        .result-handle {
+            width: 40px;
+            height: 5px;
+            background-color: #ddd;
+            border-radius: 3px;
+            margin: 10px auto;
+        }
+
+        .result-content {
+            padding: 0 20px 20px;
+        }
+
+        /* .ldroute_placeholder {
+            min-width: 200px;
+            font: 16px / 1.2 Tahoma, sans-serif;
+        } */
+
+        .ldroute_placeholder {
+            overflow: visible !important;
+            padding-top: 10px !important; /* Add some space at the top */
+        }
+
+        /* Inside result inisde .ldroute_placeholder */
+        /* Update this CSS rule in your style section */
+        .ldroute_placeholder .ldroute_menu,
+        #resultContent .ldroute_menu,
+        .result-content .ldroute_menu {
+            display: none !important;
+        }
+
+        .result-content .ldroute_placeholder {
+            margin-top: 70px !important; /* Add space at the top of the route content */
+            position: relative !important;
+        }
+
+
+        .ldroute_placeholder .ldroute_info,
+        #resultContent .ldroute_info,
+        .result-content .ldroute_info {
+            height: auto !important; /* Allow height to adjust to content */
+            min-height: 60px !important; /* Minimum height on all screens */
+            font-size: calc(24px + 2vw) !important; /* Responsive font size */
+            padding: 5px 10px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        
+        /* .ldroute_placeholder .ldroute_info,
+        #resultContent .ldroute_info,
+        .result-content .ldroute_info {
+            height: 100px;
+            font-size: 70px;
+            padding: 5px 30px 5px 30px;
+
+        } */
+
+        /* Increase spacing and prevent overlap between route elements */
+        .ldroute_placeholder .ldroute_dest {
+            position: relative !important;
+            z-index: 5 !important; /* Lower z-index than the info element */
+            margin-top: 15px !important;
+            padding: 10px 5px !important;
+            clear: both !important; /* Force new line */
+            overflow: visible !important; /* Ensure content doesn't get cut off */
+        }
+
+        /* Make the arrow images larger */
+        .ldroute_placeholder .ldroute_item img.ldroute_icon {
+            width: 24px !important; /* Increase from default size */
+            height: 24px !important;
+            margin-right: 10px !important; /* Add space after the icon */
+        }
+
+        /* Make the destination text larger */
+        .ldroute_placeholder .ldroute_item,
+        .ldroute_placeholder .ldroute_poi {
+            font-size: 16px !important; /* Increase text size */
+            line-height: 1.4 !important; /* Add more line height for readability */
+        }
+
+        /* Make distance text larger */
+        .ldroute_placeholder .ldroute_dist {
+            font-size: 18px !important; /* Increase from default size */
+            margin-right: 8px !important; /* Add some space after the distance */
+        }
+
+        /* Dont display remove destination option when press the marker*/
+        .ldmap_placeholder .ldmap_link{
+            display:none
+        }
+
+        /* Make the overall route container taller if needed */
+        #resultContent {
+            padding-top: 20px !important; /* Add top padding */
+            padding-bottom: 30px !important; /* Add bottom padding */
+            position: relative !important;
+        }
+
+
+        /* Animation for loading */
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Responsive adjustments for kiosk vertical screen */
+        @media screen and (max-width: 1080px) {
+            .header {
+                height: 80px;
+                padding: 0 20px;
+            }
+
+            .search-container {
+                top: 80px;
+                padding: 15px 20px;
+            }
+
+            select {
+                padding: 12px 12px 12px 40px;
+                font-size: 14px;
+            }
+
+            .action-button {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            .ldroute_placeholder .ldroute_info,
+            #resultContent .ldroute_info,
+            .result-content .ldroute_info {
+                font-size: 70px !important; /* Even larger font for large screens */
+                min-height: 90px !important;
+            }
+
+            #map {
+                height: calc(100vh - 80px - 160px);
+                margin-top: 240px;
+            }
+        }
+
+        /* Modal for instructions */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: #203864;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .modal-button {
+            padding: 10px 20px;
+            background-color: #203864;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal-button:hover {
+            background-color: #152749;
         }
     </style>
 
@@ -233,68 +513,104 @@
     <script type="text/javascript" src="https://api.longdo.com/map/?key=2dfb9de8a63c31f9088f4cee5b70e795"></script>
 </head>
 <body onload="initMap()">
-    <div class="back-arrow-container">
-        <img src="../images/back_arrow.png" alt="Back" class="back-arrow" onclick="home.jsp">
-    </div>
-    
-    <!-- Controls (Language, Location selection) -->
-    <div class="controls">        
-        <!-- Centered Controls -->
-        <div class="center">
-            <label for="startSelect"><%= startText %>:</label>
-            <select id="startSelect" required>
-                <option value="" disabled selected><%= startText %></option>
-                <% for(LocationsModel location : locationsList) { 
-                    String placeId = String.valueOf(location.getPlace_id());
-                    boolean isSelected = placeId.equals(selectedStartId);
-                %>
-                    <option value="<%= placeId %>" <%= isSelected ? "selected" : "" %>>
-                        <%= "th".equals(lang) ? location.getPlace_thai() : location.getPlace_english() %>
-                    </option>
-                <% } %>
-            </select>
-
-            <button onclick="swapSelectValues()" class="icon-button swap-button">
-                <img src="../images/icon/reverse_arrow2.png" alt="<%= swapText %>" class="button-icon">
+    <!-- Header -->
+    <header class="header">
+        <div class="logo-container">
+            <button class="back-button" onclick="window.location.href='home.jsp'">
+                <i class="fas fa-arrow-left"></i>
             </button>
-
-            <label for="endSelect"><%= endText %>:</label>
-            <select id="endSelect" required>
-                <option value="" disabled selected><%= endText %></option>
-                <% for(LocationsModel location : locationsList) { 
-                    String placeId = String.valueOf(location.getPlace_id());
-                    boolean isSelected = placeId.equals(selectedEndId);
-                %>
-                    <option value="<%= placeId %>" <%= isSelected ? "selected" : "" %>>
-                        <%= "th".equals(lang) ? location.getPlace_thai() : location.getPlace_english() %>
-                    </option>
-                <% } %>
-            </select>
-
-            <button id="findRouteBtn" onclick="calculateRoute()" class="icon-button">
-                <img src="../images/icon/search_icon.png" alt="<%= findRouteText %>" class="button-icon">
-            </button>
-            <button id="toggle3DBtn" onclick="toggle3D()" class="icon-button">
-                <img src="../images/icon/3d_icon.png" alt="<%= toggle3DText %>" class="button-icon">
-            </button>
+            <div class="logo">KMITL Navigator</div>
         </div>
-
-        <!-- Right-Aligned Language Switcher -->
         <div class="language-toggle">
             <a href="<%= request.getContextPath() %>/LanguageServlet?lang=en" class="lang-link">English</a> |
             <a href="<%= request.getContextPath() %>/LanguageServlet?lang=th" class="lang-link">ไทย</a>
+        </div>
+    </header>
+
+    <!-- Search Controls -->
+    <div class="search-container">
+        <div class="search-form">
+            <div class="location-select">
+                <i class="fas fa-map-marker-alt location-icon start-icon"></i>
+                <select id="startSelect" required>
+                    <option value="" disabled selected><%= startText %></option>
+                    <% for(LocationsModel location : locationsList) { 
+                        String placeId = String.valueOf(location.getPlace_id());
+                        boolean isSelected = placeId.equals(selectedStartId);
+                    %>
+                        <option value="<%= placeId %>" <%= isSelected ? "selected" : "" %>>
+                            <%= "th".equals(lang) ? location.getPlace_thai() : location.getPlace_english() %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <button onclick="swapSelectValues()" class="swap-button">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
+
+            <div class="location-select">
+                <i class="fas fa-flag-checkered location-icon end-icon"></i>
+                <select id="endSelect" required>
+                    <option value="" disabled selected><%= endText %></option>
+                    <% for(LocationsModel location : locationsList) { 
+                        String placeId = String.valueOf(location.getPlace_id());
+                        boolean isSelected = placeId.equals(selectedEndId);
+                    %>
+                        <option value="<%= placeId %>" <%= isSelected ? "selected" : "" %>>
+                            <%= "th".equals(lang) ? location.getPlace_thai() : location.getPlace_english() %>
+                        </option>
+                    <% } %>
+                </select>
+            </div>
+
+            <div class="action-buttons">
+                <button id="findRouteBtn" onclick="calculateRoute()" class="action-button find-route-btn">
+                    <i class="fas fa-route"></i>
+                    <%= findRouteText %>
+                </button>
+                <button id="toggle3DBtn" onclick="toggle3D()" class="action-button toggle-3d-btn">
+                    <i class="fas fa-cube"></i>
+                    <%= toggle3DText %>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Map Container -->
     <div id="map"></div>
-    <div id="result"></div>
+
+    <!-- Route Results Panel -->
+    <div id="result">
+        <div class="result-handle" id="resultHandle"></div>
+        <div class="result-content" id="resultContent"></div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title"><%= lang.equals("th") ? "วิธีใช้" : "How to Use" %></div>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><%= lang.equals("th") ? "1. เลือกจุดเริ่มต้นจากรายการ" : "1. Select your starting point from the dropdown" %></p>
+                <p><%= lang.equals("th") ? "2. เลือกจุดหมายปลายทาง" : "2. Select your destination" %></p>
+                <p><%= lang.equals("th") ? "3. กดปุ่ม 'ค้นหาเส้นทาง' เพื่อดูเส้นทางแนะนำ" : "3. Tap 'Find Route' to see the recommended path" %></p>
+                <p><%= lang.equals("th") ? "4. ดูขั้นตอนการเดินทางด้านล่าง" : "4. View step-by-step directions at the bottom" %></p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button" id="startUsingBtn"><%= lang.equals("th") ? "เริ่มใช้งาน" : "Start Using" %></button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let map;
         let markers = [];
         let travelMode = 'Walk'; // Default travel mode
         let routeInfo = null; // Store route information
+        let routed = false; // Store status if route has already been engaged
 
         function swapSelectValues(){
             // Get references to both select elements
@@ -309,44 +625,18 @@
             startSelect.selectedIndex = tempEndIndex;
             endSelect.selectedIndex = tempStartIndex;
 
-            // Update markers and recalculate route
-            showSelectedLocationMarker('start');
-            showSelectedLocationMarker('end');
-
             // Save the current selections to session
             updateSessionWithSelections();
 
-            calculateRoute();
+            if (routed) {
+                calculateRoute(); // draw route
+            } else {
+                // Update markers and recalculate route
+                showSelectedLocationMarker('start');
+                showSelectedLocationMarker('end');
+            }
         }
 
-        function saveSelections() {
-            const startSelect = document.getElementById('startSelect');
-            const endSelect = document.getElementById('endSelect');
-            
-            // Create a form to post the data
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '<%= request.getContextPath() %>/SaveSelectionsServlet';
-            
-            // Add hidden inputs for the selected values
-            const startInput = document.createElement('input');
-            startInput.type = 'hidden';
-            startInput.name = 'selectedStartId';
-            startInput.value = startSelect.value;
-            form.appendChild(startInput);
-            
-            const endInput = document.createElement('input');
-            endInput.type = 'hidden';
-            endInput.name = 'selectedEndId';
-            endInput.value = endSelect.value;
-            form.appendChild(endInput);
-            
-            // Submit the form
-            document.body.appendChild(form);
-            form.submit();
-        }
-
-        // Function to update session with selections without page reload
         function updateSessionWithSelections() {
             const startValue = document.getElementById('startSelect').value;
             const endValue = document.getElementById('endSelect').value;
@@ -358,27 +648,42 @@
         }
 
         function initMap() {
-            let mapLanguage = '<%= lang %>'
-            map = new longdo.Map({ placeholder: document.getElementById("map"), language: 'en', zoom: 17 });
+            let mapLanguage = '<%= lang %>';
+            map = new longdo.Map({ 
+                placeholder: document.getElementById("map"), 
+                language: mapLanguage, 
+                zoom: 17,
+                ui: longdo.UiComponent.Mobile 
+            });
             map.location({lon: 100.77848374843597, lat: 13.728225633281276}, true);
             map.zoomRange({min:16, max:20});
-            userInterfaceToggle(0); // Horizontal mode
-
+            
             // Set map language base layer
             if (mapLanguage === 'en') {
                 map.Layers.setBase(longdo.Layers.GRAY_EN);
             } else if (mapLanguage === 'th') {
                 map.Layers.setBase(longdo.Layers.GRAY);  // Default Thai layer
             }
-                
+            
+            // Hide unnecessary UI components
+            map.Ui.DPad.visible(false);
+            map.Ui.Geolocation.visible(false);
+            map.Ui.Toolbar.visible(false);
+            map.Ui.Fullscreen.visible(false);
+            map.Ui.Crosshair.visible(false);
+            map.Ui.LayerSelector.visible(false);
+            
             // Add event listeners to dropdown selects to save selections when changed
             document.getElementById('startSelect').addEventListener('change', function() {
                 updateSessionWithSelections();
                 showSelectedLocationMarker('start');
+                routed = false;
             });
+            
             document.getElementById('endSelect').addEventListener('change', function() {
                 updateSessionWithSelections();
                 showSelectedLocationMarker('end');
+                routed = false;
             });
             
             // Add event listeners to language links
@@ -398,9 +703,6 @@
                 });
             });
 
-            // Create travel mode toggle
-            createTravelModeToggle();
-
             // Check if locations are already selected (from session)
             const startSelect = document.getElementById('startSelect');
             const endSelect = document.getElementById('endSelect');
@@ -413,83 +715,142 @@
                 showSelectedLocationMarker('end');
             }
 
-            // map.Route.placeholder(document.getElementById('result'));
-            // map.Route.search();
+            // Set up result panel drag functionality
+            setupResultPanel();
+            
+            // Show instructions modal on first visit
+            if (!localStorage.getItem('instructionsShown')) {
+                showInstructionsModal();
+                localStorage.setItem('instructionsShown', 'true');
+            }
         }
 
-        // 2. Show marker for selected location
+        function setupResultPanel() {
+            const resultPanel = document.getElementById('result');
+            const resultHandle = document.getElementById('resultHandle');
+            
+            resultHandle.addEventListener('click', function() {
+                resultPanel.classList.toggle('active');
+            });
+            
+            // Setup placeholder for route results
+            map.Route.placeholder(document.getElementById('resultContent'));
+        }
+
+        function showInstructionsModal() {
+            const modal = document.getElementById('instructionsModal');
+            const closeBtn = document.getElementById('closeModal');
+            const startBtn = document.getElementById('startUsingBtn');
+            
+            modal.style.display = 'flex';
+            
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            startBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal if clicking outside of it
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Show marker for selected location
         function showSelectedLocationMarker(type) {
             const selectId = type === 'start' ? 'startSelect' : 'endSelect';
             const selectElement = document.getElementById(selectId);
             
             if (!selectElement.value) return;
+
+            // ensure makers array is initialized
+            if (!markers) markers = [];
             
             // Remove existing marker if present
-            if (markers.length > 0) {
-                if (type === 'start' && markers[0]) {
-                    map.Overlays.remove(markers[0]);
-                    markers[0] = null;
-                } else if (type === 'end' && markers[1]) {
-                    map.Overlays.remove(markers[1]);
-                    markers[1] = null;
-                }
+            const markerIndex = type === 'start' ? 0 : 1;
+            if (markers[markerIndex]) {
+                map.Overlays.remove(markers[markerIndex]);
+                markers[markerIndex] = null;
             }
             
             // Fetch location data
             fetch('<%= request.getContextPath() %>/LocationsServlet?id=' + selectElement.value)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(location => {
+                    // Verify we have valid coordinates
+                    if (!location || !location.place_lat || !location.place_long) {
+                        console.error("Invalid location data received:", location);
+                        return;
+                    }
+                    
+                    // Create custom marker based on type
+                    let markerOptions = {
+                        title: '<%= lang %>' === 'th' ? location.place_thai : location.place_english,
+                        detail: type === 'start' ? '<%= startText %>' : '<%= endText %>',
+                        weight: longdo.OverlayWeight.Top,
+                    };
+                    
+                    // Add custom icon based on type
+                    // if (type === 'start') {
+                    //     markerOptions.icon = {
+                    //         url: '../images/icon/start_marker.png',
+                    //         offset: { x: 12, y: 45 }
+                    //     };
+                    // } else {
+                    //     markerOptions.icon = {
+                    //         url: '../images/icon/end_marker.png',
+                    //         offset: { x: 12, y: 45 }
+                    //     };
+                    // }
+                    
                     // Create new marker
-                    // let markerColor = type === 'start' ? 'green' : 'red';
-                    // let iconUrl = '../images/icon/' + (type === 'start' ? 'start_marker.png' : 'end_marker.png');
                     let marker = new longdo.Marker(
                         { lat: location.place_lat, lon: location.place_long },
-                        { 
-                            title: '<%= lang %>' === 'th' ? location.place_thai : location.place_english,
-                            detail: type === 'start' ? '<%= startText %>' : '<%= endText %>',
-                            weight: longdo.OverlayWeight.Top,
-                            // lineColor: markerColor
-                        }
+                        markerOptions
                     );
                     
                     // Store marker in appropriate position
-                    if (type === 'start') {
-                        markers[0] = marker;
-                    } else {
-                        markers[1] = marker;
-                    }
-
+                    markers[markerIndex] = marker;
+                    
+                    // Add marker to map
                     map.Overlays.add(marker);
                     
                     // Center map on this marker
                     map.location({ lat: location.place_lat, lon: location.place_long }, true);
                     
-                    // Check if we can draw a route
-                    if (markers[0] && markers[1]) {
-                        // calculateRoute();
-                        console.log("Route can be drawn");
-                    }
+                    console.log(`Marker added for ${type} location:`, location);
                 })
-                .catch(error => conFole.error("Error getting location data:", error));
+                .catch(error => console.error("Error getting location data:", error));
         }
 
-        // 3. Calculate and display route
+        // Calculate and display route
         function calculateRoute() {
             // Get the start and end select elements
             const startSelect = document.getElementById('startSelect');
             const endSelect = document.getElementById('endSelect');
+            const resultPanel = document.getElementById('result');
+            
             if (!startSelect.value || !endSelect.value) {
-                alert("Please select start and end locations");
-                console.error("Start or End location not selected.");
-                return;
-            } else if (startSelect.value === "" || endSelect.value === "") {
-                alert("Please select start and end locations");
+                showNotification("Please select start and end locations");
                 return;
             } else if (startSelect.value === endSelect.value) {
-                alert("Please select different start and end locations");
+                showNotification("Please select different start and end locations");
                 return;
             } else {
-                 // Fetch location coordinates based on IDs
+                // Show loading states
+                document.getElementById('findRouteBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                document.getElementById('findRouteBtn').disabled = true;
+                
+                // Fetch location coordinates based on IDs
                 fetch('<%= request.getContextPath() %>/GetLocationCoordinatesServlet?startId=' + startSelect.value + '&endId=' + endSelect.value)
                 .then(response => {
                     if (!response.ok) {
@@ -502,7 +863,9 @@
                     if (!data.startLat || !data.startLon || !data.endLat || !data.endLon) {
                         throw new Error('Invalid coordinates received from server');
                     }
-                    map.Overlays.clear()
+                    
+                    // Clear previous route and overlays
+                    map.Overlays.clear();
                     map.Route.clear();
 
                     // Define start and end points
@@ -514,165 +877,85 @@
                     map.Route.add(endPoint);
                     
                     // Display Steps and Route and Route Mode
-                    map.Route.placeholder(document.getElementById('result'));
                     map.Route.search();
                     map.Route.mode(longdo.RouteMode.Walk);
                     
+                    // Show route results panel
+                    resultPanel.classList.add('active');
+                    
+                    // Reset the button
+                    document.getElementById('findRouteBtn').innerHTML = '<i class="fas fa-route"></i> <%= findRouteText %>';
+                    document.getElementById('findRouteBtn').disabled = false;
+                    
+                    // Add markers again after clearing overlays
+                    // showSelectedLocationMarker('start');
+                    // showSelectedLocationMarker('end');
+                    routed = true;
+
                 })
                 .catch(error => {
                     console.error("Error getting coordinates or calculating route:", error);
+                    showNotification("Error calculating route. Please try again.");
+                    
+                    // Reset the button
+                    document.getElementById('findRouteBtn').innerHTML = '<i class="fas fa-route"></i> <%= findRouteText %>';
+                    document.getElementById('findRouteBtn').disabled = false;
                 });
             }
         }
 
-        function userInterfaceToggle(mode){
-            if (mode != 0) {
-                map = new longdo.Map({
-                placeholder: document.getElementById('map'),
-                ui: longdo.UiComponent.Mobile
-                });
-                map.Ui.Geolocation.visible(false);
-                map.Ui.Fullscreen.visible(false);
-                map.Ui.Crosshair.visible(false);
-            } else {
-                map.Ui.DPad.visible(false);
-                map.Ui.Geolocation.visible(false);
-                map.Ui.Toolbar.visible(false);
-                map.Ui.Fullscreen.visible(false);
-                map.Ui.Crosshair.visible(false);
-                map.Ui.LayerSelector.visible(true);
-                longdo.LayerSelector(null, null, button)
-            }
-        }
-
-        // 5. Create travel mode toggle and route info overlay
-        function createTravelModeToggle() {
-            // Create container
-            const infoOverlay = document.createElement('div');
-            infoOverlay.id = 'routeInfoOverlay';
-            infoOverlay.style.position = 'absolute';
-            infoOverlay.style.top = '15vh';
-            infoOverlay.style.left = '70px';
-            infoOverlay.style.backgroundColor = 'white';
-            infoOverlay.style.padding = '10px';
-            infoOverlay.style.borderRadius = '5px';
-            infoOverlay.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-            infoOverlay.style.zIndex = '1000';
-            infoOverlay.style.maxWidth = '250px';
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '120px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.backgroundColor = '#333';
+            notification.style.color = 'white';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '2000';
             
-            // Travel mode toggle
-            const modeToggle = document.createElement('div');
-            modeToggle.classList.add('mode-toggle');
-            modeToggle.style.display = 'flex';
-            modeToggle.style.marginBottom = '10px';
-            modeToggle.style.borderRadius = '4px';
-            modeToggle.style.overflow = 'hidden';
-            modeToggle.style.border = '1px solid #ccc';
+            // Add to body
+            document.body.appendChild(notification);
             
-            const walkBtn = document.createElement('button');
-            walkBtn.innerText = '<%= lang %>' === 'th' ? 'เดิน' : 'Walk';
-            walkBtn.style.flex = '1';
-            walkBtn.style.padding = '8px';
-            walkBtn.style.border = 'none';
-            walkBtn.style.cursor = 'pointer';
-            walkBtn.style.backgroundColor = travelMode === 'Walk' ? '#E35205' : '#f1f1f1';
-            walkBtn.style.color = travelMode === 'Walk' ? 'white' : 'black';
-            
-            const motorBtn = document.createElement('button');
-            motorBtn.innerText = '<%= lang %>' === 'th' ? 'รถจักรยานยนต์' : 'Motorcycle';
-            motorBtn.style.flex = '1';
-            motorBtn.style.padding = '8px';
-            motorBtn.style.border = 'none';
-            motorBtn.style.cursor = 'pointer';
-            motorBtn.style.backgroundColor = travelMode === 'Distance' ? '#E35205' : '#f1f1f1';
-            motorBtn.style.color = travelMode === 'Distance' ? 'white' : 'black';
-            
-            walkBtn.addEventListener('click', function() {
-                travelMode = 'Walk';
-                walkBtn.style.backgroundColor = '#E35205';
-                walkBtn.style.color = 'white';
-                motorBtn.style.backgroundColor = '#f1f1f1';
-                motorBtn.style.color = 'black';
-                calculateRoute();
-            });
-            
-            motorBtn.addEventListener('click', function() {
-                travelMode = 'Distance';
-                motorBtn.style.backgroundColor = '#E35205';
-                motorBtn.style.color = 'white';
-                walkBtn.style.backgroundColor = '#f1f1f1';
-                walkBtn.style.color = 'black';
-                calculateRoute();
-            });
-            
-            modeToggle.appendChild(walkBtn);
-            modeToggle.appendChild(motorBtn);
-            
-            // Route info display
-            const routeTimeDiv = document.createElement('div');
-            routeTimeDiv.id = 'routeTime';
-            routeTimeDiv.style.marginBottom = '5px';
-            routeTimeDiv.innerHTML = '<i>Select locations to see travel time</i>';
-            
-            const routeDistanceDiv = document.createElement('div');
-            routeDistanceDiv.id = 'routeDistance';
-            routeDistanceDiv.style.marginBottom = '5px';
-            routeDistanceDiv.innerHTML = '<i>Select locations to see distance</i>';
-            
-            // Assemble overlay
-            infoOverlay.appendChild(modeToggle);
-            infoOverlay.appendChild(routeTimeDiv);
-            infoOverlay.appendChild(routeDistanceDiv);
-            
-            // Add to document
-            document.body.appendChild(infoOverlay);
-        }
-
-        // Update route info display
-        function updateRouteInfoDisplay() {
-            const timeDiv = document.getElementById('routeTime');
-            const distanceDiv = document.getElementById('routeDistance');
-            
-            if (routeInfo && timeDiv && distanceDiv) {
-                // Format time (comes in seconds)
-                const totalSeconds = routeInfo.searchTime;
-                const hours = Math.floor(totalSeconds / 3600);
-                const minutes = Math.floor((totalSeconds % 3600) / 60);
-                const seconds = Math.floor(totalSeconds % 60);
-                
-                let timeText = '';
-                if (hours > 0) {
-                    timeText += hours + ' ' + ('<%= lang %>' === 'th' ? 'ชั่วโมง ' : 'hr ');
-                }
-                if (minutes > 0 || hours > 0) {
-                    timeText += minutes + ' ' + ('<%= lang %>' === 'th' ? 'นาที ' : 'min ');
-                }
-                timeText += seconds + ' ' + ('<%= lang %>' === 'th' ? 'วินาที' : 'sec');
-                
-                // Format distance (comes in meters)
-                const distance = routeInfo.distance;
-                let distanceText = '';
-                if (distance >= 1000) {
-                    distanceText = (distance / 1000).toFixed(2) + ' ' + ('<%= lang %>' === 'th' ? 'กม.' : 'km');
-                } else {
-                    distanceText = Math.round(distance) + ' ' + ('<%= lang %>' === 'th' ? 'เมตร' : 'm');
-                }
-                
-                // Update display
-                timeDiv.innerHTML = '<strong>' + ('<%= lang %>' === 'th' ? 'เวลา: ' : 'Time: ') + '</strong>' + timeText;
-                distanceDiv.innerHTML = '<strong>' + ('<%= lang %>' === 'th' ? 'ระยะทาง: ' : 'Distance: ') + '</strong>' + distanceText;
-            } else {
-                // Reset if no route
-                if (timeDiv) timeDiv.innerHTML = '<i>Select locations to see travel time</i>';
-                if (distanceDiv) distanceDiv.innerHTML = '<i>Select locations to see distance</i>';
-            }
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
         }
 
         function toggle3D() {
             window.location.href = "3dmodel.jsp";
         }
 
-        // window.onload = initMap;
+        // Redirect to welcome page after inactivity
+        let inactivityTimer;
+        
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(redirectToWelcomePage, 180000); // 3 minutes
+        }
+        
+        function redirectToWelcomePage() {
+            window.location.href = 'welcome.jsp';
+        }
+        
+        // Reset timer on user interaction
+        ['click', 'touchstart', 'mousemove'].forEach(event => {
+            document.addEventListener(event, resetInactivityTimer);
+        });
+        
+        // Start the timer when page loads
+        resetInactivityTimer();
     </script>
+    <%@ include file="kiosk_activity.jsp" %>
+    <%@ include file="voice_control.jsp" %>
 </body>
 </html>
